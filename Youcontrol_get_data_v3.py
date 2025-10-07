@@ -11,7 +11,7 @@ import io
 import os
 
 TARGET_CLASS_CODE = "01.11"
-TARGET_PAGES = [16, 50]  
+TARGET_PAGES = [1]  
 
 
 
@@ -305,6 +305,7 @@ def parse_all_kved():
                                 data_beneficiary_dict = {}
                                 logger.warning(f"No beneficiary block found for company {company_code}")
 
+                            # --- Створюємо базовий запис компанії ---
                             row = {
                                 "SECTION_CODE": section_code,
                                 "SECTION_NAME": section_name,
@@ -316,10 +317,32 @@ def parse_all_kved():
                                 "CLASS_NAME": class_name,
                                 "EDRPOU_CODE": company_code,
                             }
-                            row.update(profile_dict)
-                            row.update(data_beneficiary_dict)
-                            batch_data.append(row)
-                            logger.info(f"Added data row for company {company_code}")
+
+                            # --- Об’єднуємо всі поля з різних блоків у один словник ---
+                            combined_data = {}
+
+                            for source in [profile_dict, data_beneficiary_dict]:
+                                for key, value in source.items():
+                                    if key not in combined_data:
+                                        combined_data[key] = value
+                                    else:
+                                        # Якщо поле вже існує — об’єднуємо через "; "
+                                        if isinstance(combined_data[key], str):
+                                            combined_data[key] = combined_data[key] + "; " + str(value)
+                                        else:
+                                            combined_data[key] = str(value)
+
+                            row.update(combined_data)
+
+                            # --- Перевіряємо унікальність ---
+                            existing = next((x for x in batch_data if x["EDRPOU_CODE"] == company_code), None)
+                            if existing:
+                                for key, value in row.items():
+                                    if key not in existing or not existing[key]:
+                                        existing[key] = value
+                            else:
+                                batch_data.append(row)
+
 
                     if batch_data:
                         df_batch = pd.DataFrame(batch_data)

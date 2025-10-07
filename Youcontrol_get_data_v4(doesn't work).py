@@ -208,6 +208,28 @@ def parse_class(url_chapter, class_code, class_name, context, max_workers=8):
     return results
 
 
+def merge_companies(data):
+    merged = {}
+    for row in data:
+        edrpou = row.get("EDRPOU_CODE")
+        if not edrpou:
+            continue
+
+        if edrpou not in merged:
+            merged[edrpou] = row
+            merged[edrpou]["ALL_KVEDS"] = set()
+
+        class_code = row.get("CLASS_CODE")
+        class_name = row.get("CLASS_NAME")
+        if class_code and class_name:
+            merged[edrpou]["ALL_KVEDS"].add(f"{class_code} - {class_name}")
+
+    for edrpou, company in merged.items():
+        company["ALL_KVEDS"] = "; ".join(sorted(company["ALL_KVEDS"]))
+
+    return list(merged.values())
+
+
 def parse_all_kved(parallel_classes=True):
     data = []
     html_sections = click_on_link(URL_BASE)
@@ -243,10 +265,12 @@ def parse_all_kved(parallel_classes=True):
         for f in as_completed(futures):
             batch = f.result()
             if batch:
-                save_to_csv(batch, batch[0].get("CLASS_CODE"))
                 data.extend(batch)
 
-    return pd.DataFrame(data)
+    merged_data = merge_companies(data)
+    save_to_csv(merged_data, "ALL_CLASSES")
+    return pd.DataFrame(merged_data)
+
 
 
 
