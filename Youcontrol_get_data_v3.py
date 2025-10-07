@@ -1,4 +1,5 @@
 import bs4
+import pycurl
 import pandas as pd
 import re
 import time
@@ -6,11 +7,8 @@ import logging
 import sys
 from uuid import uuid4
 import random
+import io
 import os
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException, WebDriverException
 
 TARGET_CLASS_CODE = "01.11"
 TARGET_PAGES = [1]  
@@ -45,55 +43,8 @@ USER_AGENTS = [
     "Chrome/120.0.0.0 Safari/537.36",
 ]
 
-_driver = None
-SELENIUM_PAGE_TIMEOUT = 45
-
-
-def get_driver():
-    """Initialize or reuse a headless Chrome WebDriver instance."""
-    global _driver
-    if _driver is None:
-        options = Options()
-        options.add_argument("--headless=new")
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--window-size=1920,1080")
-        options.add_argument("--lang=uk-UA")
-        selected_user_agent = random.choice(USER_AGENTS)
-        options.add_argument(f"--user-agent={selected_user_agent}")
-
-        try:
-            _driver = webdriver.Chrome(options=options)
-        except WebDriverException as exc:
-            logger.error(f"Failed to initialize Selenium WebDriver: {exc}")
-            raise
-
-        _driver.set_page_load_timeout(SELENIUM_PAGE_TIMEOUT)
-        logger.debug("Initialized Selenium WebDriver with user agent %s", selected_user_agent)
-
-    return _driver
-
-
-def wait_for_dom_ready(driver, timeout=30):
-    """Block until document.readyState is 'complete', then return."""
-    try:
-        WebDriverWait(driver, timeout).until(
-            lambda d: d.execute_script("return document.readyState") == "complete"
-        )
-    except TimeoutException as exc:
-        logger.warning(f"Timed out waiting for DOM ready state: {exc}")
-        raise
-
-
-def shutdown_driver():
-    """Dispose Selenium WebDriver if it was started."""
-    global _driver
-    if _driver is not None:
-        logger.debug("Shutting down Selenium WebDriver")
-        _driver.quit()
-        _driver = None
+def get_headers():
+    return {"User-Agent": random.choice(USER_AGENTS)}
 
 
 def smart_sleep(base_min=3, base_max=7, long_pause_chance=0.01):
@@ -106,20 +57,42 @@ def smart_sleep(base_min=3, base_max=7, long_pause_chance=0.01):
 
 
 def click_on_link(url):
-    """Fetches URL content via Selenium and returns a BeautifulSoup object."""
-    logger.info(f"Fetching URL with Selenium: {url}")
-    driver = get_driver()
+    """Fetches URL content via pycurl and returns a BeautifulSoup object."""
+    logger.info(f"Fetching URL with pycurl: {url}")
+    buffer = io.BytesIO()
 
     try:
-        driver.get(url)
-        wait_for_dom_ready(driver, timeout=30)
-        html = driver.page_source
-        return bs4.BeautifulSoup(html, "lxml")
-    except (TimeoutException, WebDriverException) as exc:
-        logger.error(f"Error fetching {url} with Selenium: {str(exc)}")
-        raise
-    finally:
+        c = pycurl.Curl()
+        c.setopt(c.URL, url)
+        c.setopt(c.WRITEDATA, buffer)
+
+        headers_dict = get_headers()
+        header_list = [f"{k}: {v}" for k, v in headers_dict.items()]
+        c.setopt(c.HTTPHEADER, header_list)
+
+        c.setopt(c.FOLLOWLOCATION, True)
+        c.setopt(c.MAXREDIRS, 5)
+
+        c.setopt(c.CONNECTTIMEOUT, 10)
+        c.setopt(c.TIMEOUT, 30)
+
+        c.perform()
+
+        status_code = c.getinfo(c.RESPONSE_CODE)
+        c.close()
+
         smart_sleep()
+
+        if status_code == 200:
+            body = buffer.getvalue().decode("utf-8", errors="ignore")
+            return bs4.BeautifulSoup(body, "lxml")
+        else:
+            logger.error(f"Failed to retrieve {url}: Status code {status_code}")
+            raise Exception(f"Failed to retrieve page: {status_code}")
+
+    except Exception as e:
+        logger.error(f"Error fetching {url} with pycurl: {str(e)}")
+        raise
 
 def clean_text(text):
     text = re.sub(r'\s+', ' ', text)
@@ -180,12 +153,9 @@ def parse_all_kved():
                     class_name = class_code_td.find_next_sibling("td").text.strip()
                     logger.info(f"Processing class: {class_code} - {class_name}")
 
-                    file_path = f"kved_{class_code}.csv"
-
-                    if os.path.exists(file_path):
-                        logger.info(f"Skipping already parsed class {class_code} (found {file_path})")
+                    if class_code != TARGET_CLASS_CODE:
+                        logger.info(f"Skipping class {class_code}, target is {TARGET_CLASS_CODE}")
                         continue
-
 
 
                     batch_data = []
@@ -335,7 +305,6 @@ def parse_all_kved():
                                 data_beneficiary_dict = {}
                                 logger.warning(f"No beneficiary block found for company {company_code}")
 
-                            # --- Створюємо базовий запис компанії ---
                             row = {
                                 "SECTION_CODE": section_code,
                                 "SECTION_NAME": section_name,
@@ -347,32 +316,10 @@ def parse_all_kved():
                                 "CLASS_NAME": class_name,
                                 "EDRPOU_CODE": company_code,
                             }
-
-                            # --- Об’єднуємо всі поля з різних блоків у один словник ---
-                            combined_data = {}
-
-                            for source in [profile_dict, data_beneficiary_dict]:
-                                for key, value in source.items():
-                                    if key not in combined_data:
-                                        combined_data[key] = value
-                                    else:
-                                        # Якщо поле вже існує — об’єднуємо через "; "
-                                        if isinstance(combined_data[key], str):
-                                            combined_data[key] = combined_data[key] + "; " + str(value)
-                                        else:
-                                            combined_data[key] = str(value)
-
-                            row.update(combined_data)
-
-                            # --- Перевіряємо унікальність ---
-                            existing = next((x for x in batch_data if x["EDRPOU_CODE"] == company_code), None)
-                            if existing:
-                                for key, value in row.items():
-                                    if key not in existing or not existing[key]:
-                                        existing[key] = value
-                            else:
-                                batch_data.append(row)
-
+                            row.update(profile_dict)
+                            row.update(data_beneficiary_dict)
+                            batch_data.append(row)
+                            logger.info(f"Added data row for company {company_code}")
 
                     if batch_data:
                         df_batch = pd.DataFrame(batch_data)
@@ -394,5 +341,3 @@ if __name__ == "__main__":
         logger.info("Data saved to separate kved_#.csv files")
     except Exception as e:
         logger.error(f"Main execution failed: {str(e)}")
-    finally:
-        shutdown_driver()

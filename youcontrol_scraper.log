@@ -1,0 +1,96 @@
+2025-10-07 09:53:22,742 - INFO - 🚀 Старт
+2025-10-07 09:53:27,195 - INFO - Знайдено 21 секцій.
+2025-10-07 09:53:38,232 - INFO - 💾 Прогрес збережено: {'section_code': 'A', 'chapter_code': '01', 'group_code': '01.1', 'class_code': '01.11', 'page': 1}
+2025-10-07 09:55:42,982 - INFO - Starting main execution
+2025-10-07 09:55:42,982 - INFO - Starting KVED parsing
+2025-10-07 09:55:42,982 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 09:55:46,850 - INFO - Retrieved main KVED catalog page
+2025-10-07 09:55:46,851 - INFO - Found 21 section blocks
+2025-10-07 09:55:46,888 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 09:55:52,671 - INFO - Retrieved chapter page: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 09:55:52,680 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 09:55:58,887 - INFO - Retrieved class page: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 09:55:58,889 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-07 09:56:06,327 - INFO - Retrieved page 1 of class 01.11
+2025-10-07 09:56:28,089 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 09:56:35,243 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 09:56:46,544 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/02
+2025-10-07 09:56:48,083 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 09:56:48,086 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 09:56:48,098 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/01/13
+2025-10-07 09:56:48,100 - INFO - Fetching: https://youcontrol.com.ua/catalog/kved/01/14
+2025-10-07 10:10:27,846 - INFO - Starting main execution
+2025-10-07 10:10:27,846 - INFO - Starting KVED parsing
+2025-10-07 10:10:27,847 - INFO - Fetching URL with Selenium: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 10:10:36,413 - INFO - Retrieved main KVED catalog page
+2025-10-07 10:10:36,415 - INFO - Found 21 section blocks
+2025-10-07 10:10:36,431 - INFO - Fetching URL with Selenium: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:10:41,529 - INFO - Retrieved chapter page: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:10:41,539 - INFO - Skipping already parsed class 01.11 (found kved_01.11.csv)
+2025-10-07 10:10:41,546 - INFO - Fetching URL with Selenium: https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 10:10:47,209 - INFO - Retrieved class page: https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 10:10:47,210 - INFO - Fetching URL with Selenium: https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 10:10:53,636 - INFO - Retrieved page 1 of class 01.12
+2025-10-07 10:16:22,069 - INFO - Starting main execution
+2025-10-07 10:16:22,069 - INFO - Starting KVED parsing
+2025-10-07 10:16:22,069 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 10:16:28,869 - INFO - Retrieved main KVED catalog page
+2025-10-07 10:16:28,871 - INFO - Found 21 section blocks
+2025-10-07 10:16:28,881 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:16:33,948 - INFO - Retrieved chapter page: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:16:33,958 - INFO - Skipping already parsed class 01.11 (found kved_01.11.csv)
+2025-10-07 10:16:33,961 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 10:16:38,930 - INFO - Retrieved class page: https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 10:16:38,931 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 10:16:42,638 - INFO - Retrieved page 1 of class 01.12
+2025-10-07 10:36:53,562 - INFO - Starting main execution
+2025-10-07 10:36:53,562 - INFO - Starting KVED parsing
+2025-10-07 10:36:53,562 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 10:36:59,944 - INFO - Retrieved main KVED catalog page
+2025-10-07 10:36:59,945 - INFO - Found 21 section blocks
+2025-10-07 10:36:59,952 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:37:05,152 - INFO - Retrieved chapter page: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:37:05,157 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 10:37:11,994 - INFO - Retrieved class page: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 10:37:11,994 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-07 10:51:11,291 - INFO - Starting KVED parsing
+2025-10-07 10:51:11,292 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 10:51:16,608 - INFO - Found 21 section blocks
+2025-10-07 10:51:16,609 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 10:51:20,376 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 10:51:48,699 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-07 10:51:54,182 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22215409/
+2025-10-07 10:52:00,891 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22215528/
+2025-10-07 10:52:04,835 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22215540/
+2025-10-07 10:52:09,627 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22215563/
+2025-10-07 10:52:16,522 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/24436825/
+2025-10-07 10:52:22,482 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216166/
+2025-10-07 10:52:30,174 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216219/
+2025-10-07 10:52:34,778 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216226/
+2025-10-07 10:52:40,958 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216373/
+2025-10-07 10:52:47,575 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216383/
+2025-10-07 10:52:56,453 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216404/
+2025-10-07 10:53:04,926 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216410/
+2025-10-07 10:53:08,457 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216433/
+2025-10-07 10:53:14,481 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216456/
+2025-10-07 10:53:21,065 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216545/
+2025-10-07 10:53:27,176 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216568/
+2025-10-07 10:53:32,810 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216574/
+2025-10-07 10:53:38,242 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/24437581/
+2025-10-07 10:53:43,610 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216580/
+2025-10-07 10:53:50,209 - INFO - [1/5] Fetching: https://youcontrol.com.ua/catalog/company_details/22216628/
+2025-10-07 10:53:57,536 - INFO - Saved class 01.11 to kved_01.11.csv
+2025-10-07 11:04:28,579 - INFO - Starting KVED parsing
+2025-10-07 11:04:28,596 - INFO - Checkpoint found: 01.11
+2025-10-07 11:04:37,183 - INFO - Found 21 section blocks
+2025-10-07 11:05:03,609 - WARNING - [1] Exception (6, 'Could not resolve host: youcontrol.com.ua'). Retrying in 5.0s...
+2025-10-07 11:08:47,593 - ERROR - Failed: HTTP 403
+2025-10-07 11:38:25,150 - INFO - Starting KVED parsing
+2025-10-07 11:38:25,151 - INFO - Checkpoint found: 01.11
+2025-10-07 11:38:25,374 - ERROR - Failed: HTTP 403
+2025-10-07 11:40:25,577 - ERROR - Failed: HTTP 403
+2025-10-07 11:42:25,815 - ERROR - Failed: HTTP 403
+2025-10-07 11:44:26,057 - ERROR - Failed: HTTP 403
+2025-10-07 11:46:26,270 - ERROR - Failed: HTTP 403
+2025-10-07 11:48:26,500 - ERROR - Failed: HTTP 403
+2025-10-07 11:50:26,755 - ERROR - Failed: HTTP 403
