@@ -56,10 +56,11 @@ def smart_sleep(base_min=3, base_max=7, long_pause_chance=0.01):
 # === Retry-завантаження ===
 def click_on_link(url, max_retries=5, backoff_factor=2, long_wait=1800):
     """
-    Fetches URL content via pycurl with infinite retries.
-    If all retries fail, waits `long_wait` seconds (default 30 min) before retrying indefinitely.
+    Improved: handles 303 redirects gracefully (e.g. Cloudflare).
     """
     attempt = 0
+    consecutive_303 = 0
+
     while True:
         try:
             buffer = io.BytesIO()
@@ -77,11 +78,29 @@ def click_on_link(url, max_retries=5, backoff_factor=2, long_wait=1800):
             status_code = c.getinfo(c.RESPONSE_CODE)
             c.close()
 
+            # === OK
             if status_code == 200:
                 html = buffer.getvalue().decode("utf-8", errors="ignore")
                 smart_sleep()
+                consecutive_303 = 0
+                logger.info(f"✅ Success: {url}")
                 return bs4.BeautifulSoup(html, "lxml")
 
+            # === Cloudflare redirect or captcha
+            elif status_code == 303:
+                consecutive_303 += 1
+                delay = 300  # 5 хвилин
+                logger.warning(f"Got HTTP 303 (Cloudflare redirect). Sleeping {delay}s...")
+                time.sleep(delay)
+
+                # якщо 303 триває довше 5 разів підряд → довга пауза
+                if consecutive_303 >= 5:
+                    logger.error(f"Site may be in protection mode. Waiting {long_wait/60:.0f} min...")
+                    time.sleep(long_wait)
+                    consecutive_303 = 0
+                continue
+
+            # === Server down
             elif status_code in [429, 500, 502, 503, 504]:
                 attempt += 1
                 delay = min((backoff_factor ** attempt) + random.uniform(1, 3), 300)
@@ -89,26 +108,20 @@ def click_on_link(url, max_retries=5, backoff_factor=2, long_wait=1800):
                 time.sleep(delay)
 
                 if attempt >= max_retries:
-                    logger.error(f"Server still down after {max_retries} tries. Waiting {long_wait/60:.0f} min...")
+                    logger.error(f"Server still down. Waiting {long_wait/60:.0f} min...")
                     time.sleep(long_wait)
                     attempt = 0
                 continue
 
             else:
-                logger.error(f"Failed: HTTP {status_code}")
-                time.sleep(120)
+                logger.error(f"Unexpected HTTP {status_code}. Waiting 60s...")
+                time.sleep(60)
                 continue
 
         except Exception as e:
-            attempt += 1
-            delay = min((backoff_factor ** attempt) + random.uniform(1, 3), 300)
-            logger.warning(f"[{attempt}] Exception {e}. Retrying in {delay:.1f}s...")
-            time.sleep(delay)
+            logger.warning(f"Network exception {e}. Retrying in 10s...")
+            time.sleep(10)
 
-            if attempt >= max_retries:
-                logger.error(f"Network still unreachable. Waiting {long_wait/60:.0f} min...")
-                time.sleep(long_wait)
-                attempt = 0
 
 
 def clean_text(text):

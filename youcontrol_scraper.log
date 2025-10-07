@@ -94,3 +94,15 @@
 2025-10-07 11:46:26,270 - ERROR - Failed: HTTP 403
 2025-10-07 11:48:26,500 - ERROR - Failed: HTTP 403
 2025-10-07 11:50:26,755 - ERROR - Failed: HTTP 403
+2025-10-07 13:57:38,330 - INFO - Starting KVED parsing
+2025-10-07 13:57:38,348 - INFO - Checkpoint found: 01.11
+2025-10-07 13:57:43,339 - INFO - Found 21 section blocks
+2025-10-07 14:00:00,643 - INFO - Starting main execution
+2025-10-07 14:00:00,643 - INFO - Starting KVED parsing
+2025-10-07 14:00:00,643 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 14:00:05,527 - INFO - Retrieved main KVED catalog page
+2025-10-07 14:00:05,528 - INFO - Found 21 section blocks
+2025-10-07 14:00:05,736 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 14:04:47,664 - INFO - Starting KVED parsing
+2025-10-07 14:04:47,664 - INFO - Checkpoint found: 01.11
+2025-10-07 14:04:54,704 - INFO - Found 21 section blocks
