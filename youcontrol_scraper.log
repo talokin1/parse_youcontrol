@@ -106,3 +106,303 @@
 2025-10-07 14:04:47,664 - INFO - Starting KVED parsing
 2025-10-07 14:04:47,664 - INFO - Checkpoint found: 01.11
 2025-10-07 14:04:54,704 - INFO - Found 21 section blocks
+2025-10-07 14:07:59,979 - INFO - Starting main execution
+2025-10-07 14:07:59,979 - INFO - Starting KVED parsing
+2025-10-07 14:07:59,980 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 14:08:06,809 - INFO - Retrieved main KVED catalog page
+2025-10-07 14:08:06,811 - INFO - Found 21 section blocks
+2025-10-07 14:08:06,819 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 14:20:05,797 - INFO - Starting KVED parsing
+2025-10-07 14:20:05,798 - INFO - Checkpoint found: 01.11
+2025-10-07 14:20:05,799 - ERROR - Global crash: name 'URL_BASE' is not defined. Restarting in 60s...
+2025-10-07 14:22:09,319 - INFO - Starting KVED parsing
+2025-10-07 14:22:09,319 - INFO - Checkpoint found: 01.11
+2025-10-07 14:22:09,320 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 14:22:10,021 - INFO - Found 21 section blocks
+2025-10-07 14:22:10,021 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 14:22:10,303 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/02
+2025-10-07 14:22:10,584 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/03
+2025-10-07 14:22:10,857 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/05
+2025-10-07 14:22:11,115 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/06
+2025-10-07 14:22:11,394 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/07
+2025-10-07 14:22:11,684 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/08
+2025-10-07 14:22:11,936 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/09
+2025-10-07 14:22:12,184 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/10
+2025-10-07 14:22:12,458 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/11
+2025-10-07 14:22:12,714 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/12
+2025-10-07 14:22:12,967 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/13
+2025-10-07 14:22:13,229 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/14
+2025-10-07 14:22:13,515 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/15
+2025-10-07 14:22:13,804 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/16
+2025-10-07 14:22:14,102 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/17
+2025-10-07 14:22:14,385 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/18
+2025-10-07 14:22:14,649 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/19
+2025-10-07 14:22:14,922 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/20
+2025-10-07 14:22:15,189 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/21
+2025-10-07 14:22:15,464 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/22
+2025-10-07 14:22:15,717 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/23
+2025-10-07 14:22:15,991 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/24
+2025-10-07 14:22:16,265 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/25
+2025-10-07 14:22:16,562 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/26
+2025-10-07 14:22:16,825 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/27
+2025-10-07 14:22:17,084 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/28
+2025-10-07 14:22:17,346 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/29
+2025-10-07 14:22:17,616 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/30
+2025-10-07 14:22:17,887 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/31
+2025-10-07 14:22:18,152 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/32
+2025-10-07 14:22:18,423 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/33
+2025-10-07 14:22:18,716 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/35
+2025-10-07 14:22:18,987 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/36
+2025-10-07 14:22:19,240 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/37
+2025-10-07 14:22:19,497 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/38
+2025-10-07 14:22:19,792 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/39
+2025-10-07 14:22:20,063 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/41
+2025-10-07 14:22:20,332 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/42
+2025-10-07 14:22:20,616 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/43
+2025-10-07 14:22:20,887 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/45
+2025-10-07 14:22:21,159 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/46
+2025-10-07 14:22:21,441 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/47
+2025-10-07 14:22:21,707 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/49
+2025-10-07 14:22:22,003 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/50
+2025-10-07 14:22:22,266 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/51
+2025-10-07 14:22:22,540 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/52
+2025-10-07 14:22:22,827 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/53
+2025-10-07 14:22:23,095 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/55
+2025-10-07 14:22:23,368 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/56
+2025-10-07 14:22:23,668 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/58
+2025-10-07 14:22:23,946 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/59
+2025-10-07 14:22:24,199 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/60
+2025-10-07 14:22:24,472 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/61
+2025-10-07 14:22:24,743 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/62
+2025-10-07 14:22:25,029 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/63
+2025-10-07 14:22:25,294 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/64
+2025-10-07 14:22:25,564 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/65
+2025-10-07 14:22:25,843 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/66
+2025-10-07 14:22:26,124 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/68
+2025-10-07 14:22:26,395 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/69
+2025-10-07 14:22:26,667 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/70
+2025-10-07 14:22:26,920 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/71
+2025-10-07 14:22:27,196 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/72
+2025-10-07 14:22:27,473 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/73
+2025-10-07 14:22:27,743 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/74
+2025-10-07 14:22:28,002 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/75
+2025-10-07 14:22:28,266 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/77
+2025-10-07 14:22:28,488 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-07 14:26:41,722 - INFO - Starting KVED parsing
+2025-10-07 14:26:41,723 - INFO - Checkpoint found: 01.11
+2025-10-07 14:26:41,723 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 14:26:42,128 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-07 17:23:28,159 - INFO - Starting main execution
+2025-10-07 17:23:28,159 - INFO - Starting KVED parsing
+2025-10-07 17:23:28,160 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:23:34,648 - INFO - Retrieved main KVED catalog page
+2025-10-07 17:23:34,649 - INFO - Found 21 section blocks
+2025-10-07 17:23:34,657 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:23:40,172 - INFO - Retrieved chapter page: https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:23:40,177 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 17:23:45,387 - INFO - Retrieved class page: https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-07 17:23:45,388 - INFO - Fetching URL with pycurl: https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-07 17:23:51,886 - INFO - Starting KVED parsing
+2025-10-07 17:23:51,886 - INFO - Checkpoint found: 01.11
+2025-10-07 17:23:51,887 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:23:52,396 - INFO - Found 21 section blocks
+2025-10-07 17:23:52,397 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:23:52,664 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 17:23:52,914 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 17:23:53,188 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00846518/
+2025-10-07 17:23:53,418 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00857315/
+2025-10-07 17:23:53,812 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20105244/
+2025-10-07 17:23:54,160 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22453742/
+2025-10-07 17:23:54,455 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32600704/
+2025-10-07 17:23:54,723 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24852618/
+2025-10-07 17:23:55,062 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22782635/
+2025-10-07 17:23:55,276 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22783020/
+2025-10-07 17:23:55,604 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34311728/
+2025-10-07 17:23:55,827 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31326160/
+2025-10-07 17:23:56,130 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31336116/
+2025-10-07 17:23:56,495 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22987886/
+2025-10-07 17:23:56,718 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32858868/
+2025-10-07 17:23:56,955 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32878109/
+2025-10-07 17:23:57,256 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32896746/
+2025-10-07 17:23:57,491 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32940145/
+2025-10-07 17:23:57,757 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32993694/
+2025-10-07 17:23:58,010 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33083817/
+2025-10-07 17:23:58,259 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33110232/
+2025-10-07 17:23:58,559 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31679087/
+2025-10-07 17:23:58,840 - INFO - Saved class 01.12 to kved_01.12.csv
+2025-10-07 17:23:58,841 - ERROR - Global crash: smart_sleep() got an unexpected keyword argument 'long_pause_chance'. Restarting in 60s...
+2025-10-07 17:28:22,179 - INFO - Starting KVED parsing
+2025-10-07 17:28:22,194 - INFO - Checkpoint found: 01.11
+2025-10-07 17:28:22,194 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:28:22,762 - INFO - Found 21 section blocks
+2025-10-07 17:28:22,763 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:28:23,021 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 17:28:23,280 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 17:28:23,546 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00846518/
+2025-10-07 17:28:23,772 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00857315/
+2025-10-07 17:28:24,015 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20105244/
+2025-10-07 17:28:24,248 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22453742/
+2025-10-07 17:28:24,492 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32600704/
+2025-10-07 17:28:24,706 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24852618/
+2025-10-07 17:28:25,025 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22782635/
+2025-10-07 17:28:25,261 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22783020/
+2025-10-07 17:28:25,605 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34311728/
+2025-10-07 17:28:25,832 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31326160/
+2025-10-07 17:28:26,086 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31336116/
+2025-10-07 17:32:47,749 - INFO - Starting KVED parsing
+2025-10-07 17:32:47,769 - INFO - Checkpoint found: 01.10
+2025-10-07 17:32:47,770 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:32:48,355 - INFO - Found 21 section blocks
+2025-10-07 17:32:48,355 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:32:48,613 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/02
+2025-10-07 17:32:48,860 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/03
+2025-10-07 17:32:49,101 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/05
+2025-10-07 17:32:49,342 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/06
+2025-10-07 17:32:49,607 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/07
+2025-10-07 17:33:15,271 - INFO - Starting KVED parsing
+2025-10-07 17:33:15,273 - INFO - Checkpoint found: 01.11
+2025-10-07 17:33:15,273 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:33:15,779 - INFO - Found 21 section blocks
+2025-10-07 17:33:15,779 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:33:16,024 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 17:33:16,293 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 17:33:16,570 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00846518/
+2025-10-07 17:33:16,796 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00857315/
+2025-10-07 17:33:17,136 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20105244/
+2025-10-07 17:33:17,461 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22453742/
+2025-10-07 17:33:17,787 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32600704/
+2025-10-07 17:33:18,062 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24852618/
+2025-10-07 17:33:18,326 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22782635/
+2025-10-07 17:41:45,056 - INFO - Starting KVED parsing
+2025-10-07 17:41:45,057 - INFO - Checkpoint found: 01.11
+2025-10-07 17:41:45,057 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:41:45,998 - INFO - Found 21 section blocks
+2025-10-07 17:41:45,999 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:41:46,268 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-07 17:41:46,548 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-07 17:41:46,806 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00846518/
+2025-10-07 17:41:47,085 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00857315/
+2025-10-07 17:41:47,342 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20105244/
+2025-10-07 17:41:47,585 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22453742/
+2025-10-07 17:41:47,810 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32600704/
+2025-10-07 17:41:48,036 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24852618/
+2025-10-07 17:41:48,276 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22782635/
+2025-10-07 17:41:48,519 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22783020/
+2025-10-07 17:41:48,750 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34311728/
+2025-10-07 17:41:48,970 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31326160/
+2025-10-07 17:41:49,222 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31336116/
+2025-10-07 17:41:49,500 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22987886/
+2025-10-07 17:41:49,758 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32858868/
+2025-10-07 17:41:50,033 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32878109/
+2025-10-07 17:41:50,372 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32896746/
+2025-10-07 17:41:50,661 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32940145/
+2025-10-07 17:41:50,919 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32993694/
+2025-10-07 17:41:51,477 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33083817/
+2025-10-07 17:41:51,705 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33110232/
+2025-10-07 17:41:51,924 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31679087/
+2025-10-07 17:41:52,225 - INFO - Saved class 01.12 to kved_01.12.csv
+2025-10-07 17:41:52,226 - ERROR - Global crash: smart_sleep() got an unexpected keyword argument 'long_pause_chance'. Restarting in 60s...
+2025-10-07 17:51:20,501 - INFO - Starting KVED parsing
+2025-10-07 17:51:20,502 - INFO - Checkpoint found: 01.12
+2025-10-07 17:51:20,502 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 17:51:20,995 - INFO - Found 21 section blocks
+2025-10-07 17:51:20,996 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 17:51:21,428 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/13
+2025-10-07 17:51:21,825 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/13?page=1
+2025-10-07 17:51:22,119 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/04687229/
+2025-10-07 17:51:22,443 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418063/
+2025-10-07 17:51:22,781 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22223404/
+2025-10-07 17:51:23,089 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30934150/
+2025-10-07 17:51:23,409 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/19391173/
+2025-10-07 17:51:23,729 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24455946/
+2025-10-07 17:51:24,094 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22243795/
+2025-10-07 17:51:24,486 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/35527732/
+2025-10-07 17:51:24,866 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22250275/
+2025-10-07 17:51:25,198 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24464767/
+2025-10-07 17:51:25,813 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22256547/
+2025-10-07 17:51:26,072 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/37150593/
+2025-10-07 17:51:26,332 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33936061/
+2025-10-07 17:51:26,652 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/35538833/
+2025-10-07 17:51:27,018 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22271024/
+2025-10-07 17:51:27,235 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30951600/
+2025-10-07 17:51:27,562 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22279059/
+2025-10-07 17:51:27,897 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22279113/
+2025-10-07 17:51:28,292 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/19419049/
+2025-10-07 17:51:28,626 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/35543251/
+2025-10-07 17:51:28,965 - INFO - Saved class 01.13 to kved_01.13.csv
+2025-10-07 17:51:28,967 - ERROR - Global crash: smart_sleep() got an unexpected keyword argument 'long_pause_chance'. Restarting in 60s...
+2025-10-07 18:04:30,582 - INFO - Starting KVED parsing
+2025-10-07 18:04:30,583 - INFO - Checkpoint found: 01.13
+2025-10-07 18:04:30,583 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 18:04:31,126 - INFO - Found 21 section blocks
+2025-10-07 18:04:31,126 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 18:04:31,374 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/14
+2025-10-07 18:04:31,618 - INFO - Parsing 1 pages for class 01.14
+2025-10-07 18:04:31,618 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/14?page=1
+2025-10-07 18:04:31,875 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/39988162/
+2025-10-07 18:04:32,171 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40857654/
+2025-10-07 18:04:32,463 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/02018808/
+2025-10-07 18:04:32,685 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41782805/
+2025-10-07 18:04:32,928 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42346577/
+2025-10-07 18:04:33,169 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42577221/
+2025-10-07 18:04:33,402 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42681109/
+2025-10-07 18:04:33,674 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43880246/
+2025-10-07 18:04:33,981 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/fop_details/23997901/
+2025-10-07 18:04:34,203 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/45578893/
+2025-10-07 18:04:58,570 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/39988162/
+2025-10-07 18:04:58,864 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40857654/
+2025-10-07 18:04:59,582 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/02018808/
+2025-10-07 18:04:59,802 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41782805/
+2025-10-07 18:05:00,294 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42346577/
+2025-10-07 18:05:00,551 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42577221/
+2025-10-07 18:05:00,778 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42681109/
+2025-10-07 18:05:00,989 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43880246/
+2025-10-07 18:05:01,217 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/fop_details/23997901/
+2025-10-07 18:05:01,408 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/45578893/
+2025-10-07 18:05:01,629 - INFO - Saved class 01.14 to kved_01.14.csv
+2025-10-07 18:05:01,630 - ERROR - Global crash: smart_sleep() got an unexpected keyword argument 'long_pause_chance'. Restarting in 60s...
+2025-10-07 18:05:45,438 - INFO - Starting KVED parsing
+2025-10-07 18:05:45,439 - INFO - Checkpoint found: 01.14
+2025-10-07 18:05:45,439 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 18:05:45,918 - INFO - Found 21 section blocks
+2025-10-07 18:05:45,918 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-07 18:05:46,181 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/15
+2025-10-07 18:05:46,452 - INFO - Parsing 3 pages for class 01.15
+2025-10-07 18:05:46,452 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/15?page=1
+2025-10-07 18:05:46,711 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/26393586/
+2025-10-07 18:05:46,958 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34036239/
+2025-10-07 18:05:47,286 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32961814/
+2025-10-07 18:05:47,616 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21378004/
+2025-10-07 18:05:47,906 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/38649279/
+2025-10-07 18:05:48,250 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40255661/
+2025-10-07 18:05:48,569 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41264970/
+2025-10-07 18:05:49,013 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41964884/
+2025-10-07 18:05:49,407 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42064208/
+2025-10-07 18:05:49,682 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42809691/
+2025-10-07 18:05:49,995 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42948690/
+2025-10-07 18:05:50,280 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42947681/
+2025-10-07 18:05:50,595 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43100063/
+2025-10-07 18:05:50,852 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43337469/
+2025-10-07 18:05:51,191 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43356078/
+2025-10-07 18:05:51,557 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43744138/
+2025-10-07 18:05:51,868 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/fop_details/44710510/
+2025-10-07 18:05:52,057 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43903011/
+2025-10-07 18:05:52,288 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/44034458/
+2025-10-07 18:05:52,653 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/44282348/
+2025-10-07 18:05:52,954 - INFO - Saved class 01.15 page 1 to kved_01.15_p1.csv
+2025-10-07 18:06:15,483 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/26393586/
+2025-10-07 18:06:15,808 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34036239/
+2025-10-07 18:06:16,147 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32961814/
+2025-10-07 18:06:16,453 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21378004/
+2025-10-07 18:06:16,706 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/38649279/
+2025-10-07 18:06:17,128 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40255661/
+2025-10-07 18:06:17,443 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41264970/
+2025-10-07 18:06:17,850 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/41964884/
+2025-10-07 18:06:18,209 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42064208/
+2025-10-07 18:06:18,558 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42809691/
+2025-10-07 18:06:18,881 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42948690/
+2025-10-07 18:06:19,243 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/42947681/
+2025-10-07 18:06:19,559 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43100063/
+2025-10-07 18:06:19,889 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43337469/
+2025-10-07 18:06:20,218 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43356078/
+2025-10-07 18:06:20,313 - ERROR - Unexpected HTTP 403, waiting 5 min

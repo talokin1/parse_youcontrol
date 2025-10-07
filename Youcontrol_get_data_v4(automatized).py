@@ -1,5 +1,5 @@
 import bs4
-import pycurl
+import cloudscraper
 import pandas as pd
 import re
 import time
@@ -12,7 +12,7 @@ import os
 
 # === Налаштування ===
 TARGET_CLASS_CODE = "01.11"
-TARGET_PAGES = [1]
+TARGET_PAGES = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,85 +42,51 @@ USER_AGENTS = [
     "Chrome/120.0.0.0 Safari/537.36",
 ]
 
+# створюємо глобальний сешн з обходом Cloudflare
+scraper = cloudscraper.create_scraper(delay=10, browser={
+    'browser': 'chrome',
+    'platform': 'windows',
+    'mobile': False
+})
+
 def get_headers():
     return {"User-Agent": random.choice(USER_AGENTS)}
 
-def smart_sleep(base_min=3, base_max=7, long_pause_chance=0.01):
-    delay = random.uniform(base_min, base_max)
-    if random.random() < long_pause_chance:
-        delay += random.uniform(20, 30)
-        logger.debug("Long pause triggered...")
-    logger.debug(f"Sleeping {delay:.2f} seconds...")
-    time.sleep(delay)
+def smart_sleep(base_min=3, base_max=7):
+    time.sleep(random.uniform(base_min, base_max))
 
-# === Retry-завантаження ===
-def click_on_link(url, max_retries=5, backoff_factor=2, long_wait=1800):
-    """
-    Improved: handles 303 redirects gracefully (e.g. Cloudflare).
-    """
+def click_on_link(url, max_retries=5, long_wait=1800):
+    """Cloudflare-safe request"""
     attempt = 0
-    consecutive_303 = 0
-
     while True:
         try:
-            buffer = io.BytesIO()
-            c = pycurl.Curl()
-            c.setopt(c.URL, url)
-            c.setopt(c.WRITEDATA, buffer)
-            header_list = [f"{k}: {v}" for k, v in get_headers().items()]
-            c.setopt(c.HTTPHEADER, header_list)
-            c.setopt(c.FOLLOWLOCATION, True)
-            c.setopt(c.MAXREDIRS, 5)
-            c.setopt(c.CONNECTTIMEOUT, 10)
-            c.setopt(c.TIMEOUT, 30)
-            c.perform()
-
-            status_code = c.getinfo(c.RESPONSE_CODE)
-            c.close()
-
-            # === OK
-            if status_code == 200:
-                html = buffer.getvalue().decode("utf-8", errors="ignore")
-                smart_sleep()
-                consecutive_303 = 0
-                logger.info(f"✅ Success: {url}")
+            logger.info(f"[{attempt+1}] Fetching {url}")
+            resp = scraper.get(url, headers=get_headers(), timeout=30)
+            
+            if resp.status_code == 200:
+                html = resp.text
                 return bs4.BeautifulSoup(html, "lxml")
 
-            # === Cloudflare redirect or captcha
-            elif status_code == 303:
-                consecutive_303 += 1
-                delay = 300  # 5 хвилин
-                logger.warning(f"Got HTTP 303 (Cloudflare redirect). Sleeping {delay}s...")
+            elif resp.status_code in [429, 500, 502, 503, 504]:
+                delay = 2 ** attempt + random.uniform(1, 3)
+                logger.warning(f"Server error {resp.status_code}, retrying in {delay:.1f}s")
                 time.sleep(delay)
-
-                # якщо 303 триває довше 5 разів підряд → довга пауза
-                if consecutive_303 >= 5:
-                    logger.error(f"Site may be in protection mode. Waiting {long_wait/60:.0f} min...")
-                    time.sleep(long_wait)
-                    consecutive_303 = 0
-                continue
-
-            # === Server down
-            elif status_code in [429, 500, 502, 503, 504]:
                 attempt += 1
-                delay = min((backoff_factor ** attempt) + random.uniform(1, 3), 300)
-                logger.warning(f"[{attempt}] Server error {status_code}. Retrying in {delay:.1f}s...")
-                time.sleep(delay)
-
-                if attempt >= max_retries:
-                    logger.error(f"Server still down. Waiting {long_wait/60:.0f} min...")
-                    time.sleep(long_wait)
-                    attempt = 0
                 continue
 
             else:
-                logger.error(f"Unexpected HTTP {status_code}. Waiting 60s...")
-                time.sleep(60)
-                continue
+                logger.error(f"Unexpected HTTP {resp.status_code}, waiting 5 min")
+                time.sleep(300)
+                attempt = 0
 
         except Exception as e:
-            logger.warning(f"Network exception {e}. Retrying in 10s...")
-            time.sleep(10)
+            logger.warning(f"Error {e}, waiting 1 min...")
+            time.sleep(60)
+            attempt += 1
+            if attempt >= max_retries:
+                logger.error(f"Server unreachable. Waiting {long_wait/60:.0f} minutes.")
+                time.sleep(long_wait)
+                attempt = 0
 
 
 
@@ -178,11 +144,13 @@ def parse_all_kved():
                 class_code_td = row.find("td", class_="green-col-num")
                 if class_code_td and current_group_code:
                     class_code = class_code_td.text.strip()
-                    if last_completed and class_code <= last_completed:
-                        continue
+                    if last_completed:
+                        if class_code == last_completed:
+                            last_completed = None  # скидаємо прапорець
+                            continue  # пропускаємо рівно останній завершений
+                        elif last_completed is not None:
+                            continue
 
-                    if class_code != TARGET_CLASS_CODE:
-                        continue
 
                     class_name = class_code_td.find_next_sibling("td").text.strip()
                     url_class = url_chapter + f'/{class_code[-2:]}'
@@ -201,7 +169,24 @@ def parse_all_kved():
                     pages_to_parse = TARGET_PAGES if TARGET_PAGES else range(1, max_page + 1)
                     batch_data = []
 
+                    checkpoint_class, checkpoint_page = None, None
+                    if os.path.exists("checkpoint.txt"):
+                        with open("checkpoint.txt") as f:
+                            line = f.read().strip()
+                            if "|" in line:
+                                checkpoint_class, checkpoint_page = line.split("|")
+                                checkpoint_page = int(checkpoint_page)
+                            else:
+                                checkpoint_class = line
+                                checkpoint_page = None
+
+                    logger.info(f"Parsing {max_page} pages for class {class_code}")
                     for page in pages_to_parse:
+                        # Пропуск сторінок, які вже оброблені
+                        if checkpoint_class == class_code and checkpoint_page and page <= checkpoint_page:
+                            logger.info(f"Skipping page {page} (already parsed before crash)")
+                            continue
+
                         url_page = url_class + f'?page={page}'
                         html_page = click_on_link(url_page)
                         if not html_page:
@@ -210,6 +195,89 @@ def parse_all_kved():
                         raw_edrpous = html_page.find_all("a", class_="link-details link-open")
                         if not raw_edrpous:
                             continue
+
+                        batch_data = []
+                        for raw_edrpou in raw_edrpous:
+                            company_code = raw_edrpou.text.split(",")[0].strip()
+                            url_details = f"https://youcontrol.com.ua{raw_edrpou.get('href')}"
+                            html_details = click_on_link(url_details)
+                            if not html_details:
+                                continue
+
+                            block_profile = html_details.find("div", class_="seo-table-contain", id="catalog-company-file")
+                            profile_dict = {}
+                            if block_profile:
+                                profile_rows = block_profile.find_all("div", class_="seo-table-row")
+                                profile_data_columns = [
+                                    row.find("div", class_="seo-table-col-1").text.strip()
+                                    for row in profile_rows
+                                ]
+
+                                raw_data = [
+                                    (row.find("span", class_="copy-file-field") or
+                                    row.find("div", class_="copy-file-field") or
+                                    row.find("p", class_="ucfirst copy-file-field") or
+                                    row.find("div", class_="seo-table-col-2")).text
+                                    for row in profile_rows
+                                    if (row.find("span", class_="copy-file-field") or
+                                        row.find("div", class_="copy-file-field") or
+                                        row.find("p", class_="ucfirst copy-file-field") or
+                                        row.find("div", class_="seo-table-col-2"))
+                                ]
+                                profile_data_text = [clean_text(x) for x in raw_data if x.strip()]
+                                profile_dict = dict(zip(profile_data_columns, profile_data_text))
+
+                            block_beneficiary = html_details.find("div", class_="seo-table-contain", id="catalog-company-beneficiary")
+                            data_beneficiary_dict = {}
+                            if block_beneficiary:
+                                beneficiary_rows = block_beneficiary.find_all("div", class_="seo-table-row")
+                                beneficiary_data_columns = [r.find("div", class_="seo-table-col-1").text.strip() for r in beneficiary_rows]
+
+                                raw_edrpou = html_details.find("h2", class_="seo-table-name case-icon short").text
+                                edrpou = re.search(r'\d+', raw_edrpou).group() if re.search(r'\d+', raw_edrpou) else None
+                                beneficiary_data_columns.append("EDRPOU_CODE")
+
+                                text_beneficiary_spans = [r.find("span", class_="copy-file-field") for r in beneficiary_rows]
+                                text_beneficiary_persons = [
+                                    r.find("div", class_="seo-table-col-2")
+                                    if r.find("div", class_="seo-table-col-2") and 'copy-hover' not in r.find("div", class_="seo-table-col-2").get("class", [])
+                                    else None for r in beneficiary_rows
+                                ]
+                                text_beneficiary_spans = [x for x in text_beneficiary_spans if x]
+                                text_beneficiary_persons = [x for x in text_beneficiary_persons if x]
+
+                                data_beneficiary = text_beneficiary_spans + text_beneficiary_persons
+                                data_beneficiary_text = [clean_text(x.text) for x in data_beneficiary] + [edrpou]
+
+                                data_beneficiary_dict = dict(zip(beneficiary_data_columns, data_beneficiary_text))
+
+                            row_data = {
+                                "SECTION_CODE": section_code,
+                                "SECTION_NAME": section_name,
+                                "CHAPTER_CODE": chapter_code,
+                                "CHAPTER_NAME": chapter_name,
+                                "GROUP_CODE": current_group_code,
+                                "GROUP_NAME": current_group_name,
+                                "CLASS_CODE": class_code,
+                                "CLASS_NAME": class_name,
+                                "EDRPOU_CODE": company_code,
+                            }
+                            row_data.update(profile_dict)
+                            row_data.update(data_beneficiary_dict)
+                            batch_data.append(row_data)
+
+                        # === ЗБЕРЕЖЕННЯ ПІСЛЯ КОЖНОЇ СТОРІНКИ ===
+                        if batch_data:
+                            df_batch = pd.DataFrame(batch_data)
+                            file_path = f"kved_{class_code}_p{page}.csv"
+                            df_batch.to_csv(file_path, mode='w', header=True, index=False)
+                            logger.info(f"Saved class {class_code} page {page} to {file_path}")
+
+                            with open("checkpoint.txt", "w") as f:
+                                f.write(f"{class_code}|{page}")
+
+                            smart_sleep(base_min=15, base_max=30)
+
 
                         for raw_edrpou in raw_edrpous:
                             company_code = raw_edrpou.text.split(",")[0].strip()
@@ -226,6 +294,40 @@ def parse_all_kved():
                                     row.find("div", class_="seo-table-col-1").text.strip()
                                     for row in profile_rows
                                 ]
+
+                            block_beneficiary = html_details.find("div", class_="seo-table-contain", id="catalog-company-beneficiary")
+                            data_beneficiary_dict = {}
+                            if block_beneficiary:
+                                beneficiary_rows = block_beneficiary.find_all("div", class_="seo-table-row")
+
+                                beneficiary_data_columns = []
+                                for rows in beneficiary_rows:
+                                    beneficiary_data_columns.append(rows.find("div", class_="seo-table-col-1").text.strip())
+
+                                raw_edrpou = html_details.find("h2", class_="seo-table-name case-icon short").text
+                                edrpou = re.search(r'\d+', raw_edrpou).group() if re.search(r'\d+', raw_edrpou) else None
+
+                                beneficiary_data_columns.append("EDRPOU_CODE")
+
+                                text_beneficiary_spans = [row.find("span", class_="copy-file-field") for row in beneficiary_rows]
+                                text_beneficiary_persons = [
+                                    row.find("div", class_="seo-table-col-2")
+                                    if row.find("div", class_="seo-table-col-2")
+                                    and 'copy-hover' not in row.find("div", class_="seo-table-col-2").get("class", [])
+                                    else None
+                                    for row in beneficiary_rows
+                                ]
+
+                                text_beneficiary_spans = [x for x in text_beneficiary_spans if x is not None]
+                                text_beneficiary_persons = [x for x in text_beneficiary_persons if x is not None]
+
+                                data_beneficiary = text_beneficiary_spans + text_beneficiary_persons
+                                data_beneficiary_text = [data.text for data in data_beneficiary]
+                                data_beneficiary_text = data_beneficiary_text + [edrpou]
+
+                                data_beneficiary_dict = dict(zip(beneficiary_data_columns, data_beneficiary_text))
+                                data_beneficiary_dict = {k: clean_text(v) for k, v in data_beneficiary_dict.items()}
+
                                 raw_data = [
                                     (row.find("span", class_="copy-file-field") or
                                      row.find("div", class_="copy-file-field") or
@@ -252,6 +354,7 @@ def parse_all_kved():
                                 "EDRPOU_CODE": company_code,
                             }
                             row_data.update(profile_dict)
+                            row_data.update(data_beneficiary_dict) 
                             batch_data.append(row_data)
 
                     if batch_data:
