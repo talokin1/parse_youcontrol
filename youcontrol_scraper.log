@@ -406,3 +406,56 @@
 2025-10-07 18:06:19,889 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43337469/
 2025-10-07 18:06:20,218 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/43356078/
 2025-10-07 18:06:20,313 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-07 21:24:43,018 - INFO - Starting KVED parsing
+2025-10-07 21:24:43,019 - INFO - Checkpoint found: 01.15|1
+2025-10-07 21:24:43,019 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-07 21:24:43,501 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-08 10:26:04,427 - INFO - Parsing complete. Restarting in 5 minutes.
+2025-10-08 10:27:01,089 - INFO - Starting KVED parsing
+2025-10-08 10:27:02,798 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:27:02,802 - ERROR - Global crash: Task <Task pending name='Task-1' coro=<parse_all_kved() running at C:\OTP Draft\YouControl\Youcontrol_get_data_v5(async).py:192> cb=[_run_until_complete_cb() at c:\Users\Mykola\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:181]> got Future <Future pending cb=[_chain_future.<locals>._call_check_cancel() at c:\Users\Mykola\AppData\Local\Programs\Python\Python313\Lib\asyncio\futures.py:384]> attached to a different loop. Restarting in 60s...
+2025-10-08 10:28:02,804 - INFO - Starting KVED parsing
+2025-10-08 10:28:04,078 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:28:04,079 - ERROR - Global crash: Task <Task pending name='Task-4' coro=<parse_all_kved() running at C:\OTP Draft\YouControl\Youcontrol_get_data_v5(async).py:192> cb=[_run_until_complete_cb() at c:\Users\Mykola\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py:181]> got Future <Future pending cb=[_chain_future.<locals>._call_check_cancel() at c:\Users\Mykola\AppData\Local\Programs\Python\Python313\Lib\asyncio\futures.py:384]> attached to a different loop. Restarting in 60s...
+2025-10-08 10:32:48,182 - INFO - Starting KVED parsing
+2025-10-08 10:32:49,905 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:32:50,541 - INFO - Found 21 section blocks
+2025-10-08 10:32:53,006 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-08 10:32:54,370 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-08 10:32:55,140 - INFO - Parsing 5 pages for class 01.11
+2025-10-08 10:32:56,560 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-08 10:32:58,453 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215409/
+2025-10-08 10:32:59,348 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215540/
+2025-10-08 10:32:59,544 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215528/
+2025-10-08 10:32:59,642 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215563/
+2025-10-08 10:32:59,899 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24436825/
+2025-10-08 10:40:30,415 - INFO - Starting KVED parsing
+2025-10-08 10:40:31,550 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:40:32,101 - INFO - Found 0 section blocks
+2025-10-08 10:40:32,122 - INFO - Completed parsing all KVEDs.
+2025-10-08 10:40:32,123 - INFO - Parsing complete. Restarting in 5 minutes.
+2025-10-08 10:41:54,266 - INFO - Starting KVED parsing
+2025-10-08 10:41:55,927 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:41:56,487 - INFO - Found 0 section blocks
+2025-10-08 10:41:56,488 - INFO - Completed parsing all KVEDs.
+2025-10-08 10:41:56,489 - INFO - Parsing complete. Restarting in 5 minutes.
+2025-10-08 10:42:15,856 - INFO - Starting KVED parsing
+2025-10-08 10:42:17,535 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:42:18,202 - INFO - Found 21 section blocks
+2025-10-08 10:42:19,382 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-08 10:44:01,540 - INFO - Starting KVED parsing
+2025-10-08 10:44:10,054 - INFO - Starting KVED parsing
+2025-10-08 10:44:11,349 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:44:12,031 - INFO - Found 0 section blocks
+2025-10-08 10:44:12,032 - INFO - Completed parsing all KVEDs.
+2025-10-08 10:44:12,033 - INFO - Parsing complete. Restarting in 5 minutes.
+2025-10-08 10:45:54,583 - INFO - Starting KVED parsing
+2025-10-08 10:45:56,288 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:45:56,816 - INFO - Found 21 section blocks
+2025-10-08 10:45:59,247 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-08 10:50:07,786 - INFO - Starting KVED parsing
+2025-10-08 10:50:09,692 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 10:50:10,246 - INFO - Found 21 section blocks
+2025-10-08 10:50:11,613 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-08 10:50:14,371 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-08 10:50:15,073 - INFO - Parsing 5 pages for class 01.11
