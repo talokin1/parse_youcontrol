@@ -63,6 +63,7 @@ scraper = cloudscraper.create_scraper(delay=10, browser={
     'platform': 'windows',
     'mobile': False
 })
+
 def get_headers():
     return {
         "User-Agent": random.choice(USER_AGENTS),
@@ -265,12 +266,16 @@ async def parse_all_kved():
                 pages_to_parse = TARGET_PAGES if TARGET_PAGES else range(1, max_page + 1)
                 logger.info(f"Parsing {max_page} pages for class {class_code}")
 
-                for page in pages_to_parse:
-                    # Пропуск сторінок, які вже оброблені до збою
-                    if checkpoint_class == class_code and checkpoint_page and page <= checkpoint_page:
-                        logger.info(f"Skipping page {page} (already parsed before crash)")
-                        continue
+                # === Акумулюємо дані та зберігаємо кожні 10 сторінок або останню ===
+                all_batches = []
+                start_page = 1
 
+                # Якщо є checkpoint для цього класу — продовжуємо з потрібної сторінки
+                if checkpoint_class == class_code and checkpoint_page:
+                    start_page = checkpoint_page + 1
+                    logger.info(f"⏩ Resuming class {class_code} from page {start_page}")
+
+                for page in range(start_page, max_page + 1):
                     url_page = f"{url_class}?page={page}"
                     html_page = await fetch_async(url_page)
                     if not html_page:
@@ -280,7 +285,7 @@ async def parse_all_kved():
                     if not raw_edrpous:
                         continue
 
-                    # === Асинхронна обробка компаній на сторінці ===
+                    # === Асинхронна обробка компаній ===
                     tasks = []
                     for raw_edrpou in raw_edrpous:
                         company_code = raw_edrpou.text.split(",")[0].strip()
@@ -295,33 +300,28 @@ async def parse_all_kved():
 
                     results = await asyncio.gather(*tasks)
                     batch_data = [r for r in results if r]
-
-                    # === Збереження після кожної сторінки ===
                     if batch_data:
-                        df_batch = pd.DataFrame(batch_data)
+                        all_batches.extend(batch_data)
+                        logger.info(f"Parsed page {page} of {class_code} (buffer {len(all_batches)} records)")
+
+                    # === Зберігаємо кожні 10 сторінок або останню ===
+                    if page % 10 == 0 or page == max_page:
+                        df_partial = pd.DataFrame(all_batches)
                         file_path = f"kved_{class_code}_p{page}.csv"
-                        df_batch.to_csv(file_path, mode='w', header=True, index=False)
-                        logger.info(f"Saved class {class_code} page {page} to {file_path}")
+                        df_partial.to_csv(file_path, index=False)
+                        logger.info(f"Saved cumulative data up to page {page} ({len(all_batches)} rows) → {file_path}")
+                        all_batches = []  # очищаємо буфер
 
                         with open("checkpoint.txt", "w") as f:
                             f.write(f"{class_code}|{page}")
 
-                        await asyncio.sleep(random.uniform(10, 25))
+                        await asyncio.sleep(random.uniform(7, 17))
 
-                # === Фінальне збереження класу ===
-                logger.info(f"Completed class {class_code}, saving combined CSV")
-                all_parts = [f for f in os.listdir() if f.startswith(f'kved_{class_code}_p')]
-                if all_parts:
-                    df_final = pd.concat([pd.read_csv(f) for f in all_parts], ignore_index=True)
-                    df_final.to_csv(f'kved_{class_code}.csv', index=False)
-                    logger.info(f"Saved merged file kved_{class_code}.csv")
-                    for f in all_parts:
-                        os.remove(f)
-
-                    with open("checkpoint.txt", "w") as f:
-                        f.write(class_code)
-
-                    await asyncio.sleep(random.uniform(20, 40))
+                # Після завершення класу оновлюємо checkpoint, щоб перейти до наступного
+                with open("checkpoint.txt", "w") as f:
+                    f.write(class_code)
+                logger.info(f"Completed class {class_code}")
+                await asyncio.sleep(random.uniform(15, 20))
 
     logger.info("Completed parsing all KVEDs.")
 
