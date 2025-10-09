@@ -15,13 +15,13 @@ from concurrent.futures import ThreadPoolExecutor
 # === Асинхронна конфігурація ===
 executor = ThreadPoolExecutor(max_workers=8)
 semaphore = asyncio.Semaphore(5)
-
+    
 async def fetch_async(url):
     """Асинхронне виконання click_on_link через ThreadPool."""
-    loop = asyncio.get_running_loop()  
+    loop = asyncio.get_event_loop()  # Замість get_running_loop()
     async with semaphore:
-        await asyncio.sleep(random.uniform(1.0, 2.5))  # пауза для антибана
-        return await loop.run_in_executor(executor, lambda: click_on_link(url))
+        await asyncio.sleep(random.uniform(1.0, 2.5))
+        return await loop.run_in_executor(executor, click_on_link, url)  # Передайте url як аргумент
 
 
 

@@ -1,0 +1,2 @@
+2025-10-08 14:22:17,281 - ERROR - Unexpected HTTP 403 for https://youcontrol.com.ua/catalog/kved/, sleep 60s and retry
+2025-10-08 15:40:37,647 - ERROR - Unexpected HTTP 403 for https://youcontrol.com.ua/catalog/kved/, sleep 60s and retry

@@ -711,3 +711,238 @@
 2025-10-08 11:23:10,139 - INFO - Checkpoint found: 01.11
 2025-10-08 11:23:12,132 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
 2025-10-08 11:23:12,630 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-08 11:43:34,747 - INFO - Starting KVED parsing
+2025-10-08 11:43:34,748 - INFO - Checkpoint found: 01.11
+2025-10-08 11:43:37,020 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 11:43:37,438 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-08 13:37:12,789 - INFO - Starting KVED parsing
+2025-10-08 13:37:12,789 - INFO - Checkpoint found: 01.11
+2025-10-08 13:37:14,134 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-08 13:37:14,586 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-09 07:49:29,924 - INFO - Starting KVED parsing
+2025-10-09 07:49:29,925 - INFO - Checkpoint found: 01.11
+2025-10-09 07:49:32,262 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-09 07:49:33,161 - INFO - Found 21 section blocks
+2025-10-09 07:49:34,580 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-09 07:49:37,398 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-09 07:49:37,846 - INFO - Parsing 5 pages for class 01.12
+2025-10-09 07:49:39,832 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-09 07:50:06,914 - INFO - Starting KVED parsing
+2025-10-09 07:50:08,997 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/
+2025-10-09 07:50:09,495 - INFO - Found 21 section blocks
+2025-10-09 07:50:11,657 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01
+2025-10-09 07:50:13,563 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11
+2025-10-09 07:50:14,232 - INFO - Parsing 5 pages for class 01.11
+2025-10-09 07:50:16,031 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=1
+2025-10-09 07:50:17,774 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215409/
+2025-10-09 07:50:18,236 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215528/
+2025-10-09 07:50:18,253 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215563/
+2025-10-09 07:50:18,932 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24436825/
+2025-10-09 07:50:19,166 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22215540/
+2025-10-09 07:50:19,851 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216166/
+2025-10-09 07:50:20,006 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216226/
+2025-10-09 07:50:20,117 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216219/
+2025-10-09 07:50:20,754 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216373/
+2025-10-09 07:50:21,730 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216383/
+2025-10-09 07:50:21,884 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216433/
+2025-10-09 07:50:22,299 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216410/
+2025-10-09 07:50:22,451 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216404/
+2025-10-09 07:50:23,428 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216456/
+2025-10-09 07:50:23,521 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216545/
+2025-10-09 07:50:23,989 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24437581/
+2025-10-09 07:50:24,315 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216568/
+2025-10-09 07:50:24,935 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216628/
+2025-10-09 07:50:24,982 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216574/
+2025-10-09 07:50:25,184 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216580/
+2025-10-09 07:50:25,500 - INFO - Parsed page 1 of 01.11 (buffer 20 records)
+2025-10-09 07:50:27,103 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=2
+2025-10-09 07:50:29,162 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216870/
+2025-10-09 07:50:29,476 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216775/
+2025-10-09 07:50:30,204 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216781/
+2025-10-09 07:50:30,251 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925015/
+2025-10-09 07:50:30,251 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216634/
+2025-10-09 07:50:30,361 - WARNING - Server error 503, retrying in 2.6s
+2025-10-09 07:50:31,228 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/19365543/
+2025-10-09 07:50:31,559 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216893/
+2025-10-09 07:50:32,119 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216947/
+2025-10-09 07:50:32,925 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216953/
+2025-10-09 07:50:32,929 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/22216634/
+2025-10-09 07:50:33,818 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216999/
+2025-10-09 07:50:34,037 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925188/
+2025-10-09 07:50:34,082 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22216960/
+2025-10-09 07:50:34,445 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217013/
+2025-10-09 07:50:35,031 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925193/
+2025-10-09 07:50:35,761 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925282/
+2025-10-09 07:50:36,027 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925319/
+2025-10-09 07:50:36,257 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217094/
+2025-10-09 07:50:37,093 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217237/
+2025-10-09 07:50:37,264 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217303/
+2025-10-09 07:50:38,102 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925497/
+2025-10-09 07:50:38,598 - INFO - Parsed page 2 of 01.11 (buffer 40 records)
+2025-10-09 07:50:39,711 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=3
+2025-10-09 07:50:41,399 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217817/
+2025-10-09 07:50:41,552 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217929/
+2025-10-09 07:50:41,626 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24438729/
+2025-10-09 07:50:41,710 - WARNING - Server error 503, retrying in 3.6s
+2025-10-09 07:50:41,833 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925649/
+2025-10-09 07:50:42,048 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925612/
+2025-10-09 07:50:43,434 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218082/
+2025-10-09 07:50:43,497 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22217958/
+2025-10-09 07:50:44,271 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218047/
+2025-10-09 07:50:44,691 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925785/
+2025-10-09 07:50:45,324 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218099/
+2025-10-09 07:50:45,331 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/24438729/
+2025-10-09 07:50:45,822 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218136/
+2025-10-09 07:50:46,864 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24439137/
+2025-10-09 07:50:47,065 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24439096/
+2025-10-09 07:50:47,298 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218248/
+2025-10-09 07:50:47,380 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925984/
+2025-10-09 07:50:48,243 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30925997/
+2025-10-09 07:50:48,800 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218343/
+2025-10-09 07:50:49,393 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218314/
+2025-10-09 07:50:49,549 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218351/
+2025-10-09 07:50:49,862 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218337/
+2025-10-09 07:50:50,233 - INFO - Parsed page 3 of 01.11 (buffer 60 records)
+2025-10-09 07:50:51,444 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=4
+2025-10-09 07:50:53,409 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30833731/
+2025-10-09 07:50:53,487 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30833815/
+2025-10-09 07:50:53,894 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218372/
+2025-10-09 07:50:54,359 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218366/
+2025-10-09 07:50:54,391 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22311249/
+2025-10-09 07:50:54,902 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30833726/
+2025-10-09 07:50:55,744 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218426/
+2025-10-09 07:50:56,144 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20722445/
+2025-10-09 07:50:56,207 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218604/
+2025-10-09 07:50:56,819 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24439396/
+2025-10-09 07:50:57,388 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24439628/
+2025-10-09 07:50:57,574 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218691/
+2025-10-09 07:50:57,981 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30926286/
+2025-10-09 07:50:58,351 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218716/
+2025-10-09 07:50:58,430 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218722/
+2025-10-09 07:50:59,689 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22218828/
+2025-10-09 07:51:00,031 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418215/
+2025-10-09 07:51:00,031 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418220/
+2025-10-09 07:51:00,138 - WARNING - Server error 503, retrying in 3.6s
+2025-10-09 07:51:00,140 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30926820/
+2025-10-09 07:51:00,251 - WARNING - Server error 503, retrying in 2.4s
+2025-10-09 07:51:00,466 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22219058/
+2025-10-09 07:51:02,682 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/30926820/
+2025-10-09 07:51:03,776 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/32418220/
+2025-10-09 07:51:04,207 - INFO - Parsed page 4 of 01.11 (buffer 80 records)
+2025-10-09 07:51:05,405 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/11?page=5
+2025-10-09 07:51:07,695 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418393/
+2025-10-09 07:51:07,846 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30926857/
+2025-10-09 07:51:08,259 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418423/
+2025-10-09 07:51:08,383 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22219325/
+2025-10-09 07:51:08,600 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418409/
+2025-10-09 07:51:10,454 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418461/
+2025-10-09 07:51:10,487 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24440293/
+2025-10-09 07:51:10,613 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418440/
+2025-10-09 07:51:10,629 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418456/
+2025-10-09 07:51:10,732 - WARNING - Server error 503, retrying in 2.9s
+2025-10-09 07:51:10,977 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418498/
+2025-10-09 07:51:12,063 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927117/
+2025-10-09 07:51:12,854 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24440494/
+2025-10-09 07:51:12,902 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32418592/
+2025-10-09 07:51:13,366 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927172/
+2025-10-09 07:51:13,609 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/32418440/
+2025-10-09 07:51:13,644 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33915979/
+2025-10-09 07:51:14,467 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927206/
+2025-10-09 07:51:15,292 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927211/
+2025-10-09 07:51:15,338 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927185/
+2025-10-09 07:51:15,415 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/35516123/
+2025-10-09 07:51:15,509 - WARNING - Server error 503, retrying in 2.9s
+2025-10-09 07:51:15,993 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30927274/
+2025-10-09 07:51:18,369 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/35516123/
+2025-10-09 07:51:18,750 - INFO - Parsed page 5 of 01.11 (buffer 100 records)
+2025-10-09 07:51:29,062 - INFO - Completed class 01.11
+2025-10-09 07:51:47,516 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12
+2025-10-09 07:51:47,852 - INFO - Parsing 5 pages for class 01.12
+2025-10-09 07:51:50,082 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=1
+2025-10-09 07:51:51,606 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00857315/
+2025-10-09 07:51:51,841 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22453742/
+2025-10-09 07:51:52,417 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32600704/
+2025-10-09 07:51:52,540 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/20105244/
+2025-10-09 07:51:52,841 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/00846518/
+2025-10-09 07:51:53,679 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/24852618/
+2025-10-09 07:51:54,210 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31326160/
+2025-10-09 07:51:54,574 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34311728/
+2025-10-09 07:51:54,657 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22782635/
+2025-10-09 07:51:55,091 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22783020/
+2025-10-09 07:51:55,870 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/22987886/
+2025-10-09 07:51:56,476 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31336116/
+2025-10-09 07:51:57,365 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32858868/
+2025-10-09 07:51:57,533 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32878109/
+2025-10-09 07:51:57,642 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32940145/
+2025-10-09 07:51:57,643 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32896746/
+2025-10-09 07:51:57,786 - WARNING - Server error 503, retrying in 3.9s
+2025-10-09 07:51:58,809 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32993694/
+2025-10-09 07:51:59,244 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33083817/
+2025-10-09 07:51:59,337 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33110232/
+2025-10-09 07:52:00,224 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31679087/
+2025-10-09 07:52:01,731 - INFO - [2] Fetching https://youcontrol.com.ua/catalog/company_details/32896746/
+2025-10-09 07:52:02,064 - INFO - Parsed page 1 of 01.12 (buffer 20 records)
+2025-10-09 07:52:03,227 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=2
+2025-10-09 07:52:04,640 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33124224/
+2025-10-09 07:52:04,842 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33169470/
+2025-10-09 07:52:05,110 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33166023/
+2025-10-09 07:52:05,124 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21312258/
+2025-10-09 07:52:05,543 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33168387/
+2025-10-09 07:52:06,227 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21322104/
+2025-10-09 07:52:07,021 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21349209/
+2025-10-09 07:52:07,115 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31742242/
+2025-10-09 07:52:07,315 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21337956/
+2025-10-09 07:52:07,704 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/36269233/
+2025-10-09 07:52:07,828 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21348322/
+2025-10-09 07:52:09,058 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30413257/
+2025-10-09 07:52:09,835 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/23827943/
+2025-10-09 07:52:09,853 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33271035/
+2025-10-09 07:52:10,531 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/23844611/
+2025-10-09 07:52:10,701 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/25646565/
+2025-10-09 07:52:11,277 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/36837333/
+2025-10-09 07:52:11,558 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30491670/
+2025-10-09 07:52:11,558 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/19207488/
+2025-10-09 07:52:12,344 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/25940554/
+2025-10-09 07:52:12,710 - INFO - Parsed page 2 of 01.12 (buffer 40 records)
+2025-10-09 07:52:14,135 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=3
+2025-10-09 07:52:15,608 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21998497/
+2025-10-09 07:52:16,042 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21810909/
+2025-10-09 07:52:16,466 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14143743/
+2025-10-09 07:52:16,599 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14164716/
+2025-10-09 07:52:16,833 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14162717/
+2025-10-09 07:52:17,483 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14166891/
+2025-10-09 07:52:18,247 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14169694/
+2025-10-09 07:52:18,307 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14169470/
+2025-10-09 07:52:18,713 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14167695/
+2025-10-09 07:52:18,713 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/19058396/
+2025-10-09 07:52:19,769 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33389987/
+2025-10-09 07:52:20,767 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33502721/
+2025-10-09 07:52:20,797 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33641469/
+2025-10-09 07:52:21,045 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33571968/
+2025-10-09 07:52:21,266 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33701564/
+2025-10-09 07:52:21,297 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33663094/
+2025-10-09 07:52:23,037 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30622752/
+2025-10-09 07:52:23,130 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30613533/
+2025-10-09 07:52:23,846 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/26293100/
+2025-10-09 07:52:23,955 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30863263/
+2025-10-09 07:52:24,344 - INFO - Parsed page 3 of 01.12 (buffer 60 records)
+2025-10-09 07:52:26,848 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/kved/01/12?page=4
+2025-10-09 07:52:28,355 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40075993/
+2025-10-09 07:52:29,024 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/38186683/
+2025-10-09 07:52:29,463 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40285565/
+2025-10-09 07:52:29,496 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/35202293/
+2025-10-09 07:52:29,558 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/38151273/
+2025-10-09 07:52:30,785 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/40402613/
+2025-10-09 07:52:31,065 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/34281044/
+2025-10-09 07:52:31,234 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/31218713/
+2025-10-09 07:52:31,794 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/33009246/
+2025-10-09 07:52:32,199 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/14155427/
+2025-10-09 07:52:32,277 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/32452078/
+2025-10-09 07:52:32,306 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-09 07:52:32,394 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-09 07:52:32,696 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21324729/
+2025-10-09 07:52:32,822 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-09 07:52:32,868 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/30901015/
+2025-10-09 07:52:32,983 - ERROR - Unexpected HTTP 403, waiting 5 min
+2025-10-09 07:52:34,029 - INFO - [1] Fetching https://youcontrol.com.ua/catalog/company_details/21337637/
+2025-10-09 07:52:34,138 - ERROR - Unexpected HTTP 403, waiting 5 min

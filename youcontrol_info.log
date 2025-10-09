@@ -1,0 +1,9 @@
+2025-10-08 14:22:15,315 - INFO - YouControl v6 hybrid started
+2025-10-08 14:22:15,316 - INFO - Starting KVED crawl (producer)
+2025-10-08 14:22:17,281 - ERROR - Unexpected HTTP 403 for https://youcontrol.com.ua/catalog/kved/, sleep 60s and retry
+2025-10-08 15:40:35,710 - INFO - YouControl v6 hybrid started
+2025-10-08 15:40:35,710 - INFO - Starting KVED crawl (producer)
+2025-10-08 15:40:37,647 - ERROR - Unexpected HTTP 403 for https://youcontrol.com.ua/catalog/kved/, sleep 60s and retry
+2025-10-08 22:39:49,108 - INFO - YouControl v6 hybrid started
+2025-10-08 22:39:49,108 - INFO - Starting KVED crawl (producer)
+2025-10-08 22:39:50,598 - INFO - Found 21 section blocks
