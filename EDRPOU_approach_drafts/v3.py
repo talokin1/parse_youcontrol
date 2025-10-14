@@ -140,7 +140,7 @@ async def fetch_company(session, edrpou, proxies=None, max_retries=5):
 # ----------------------------------------------------------
 # Async parser runner
 # ----------------------------------------------------------
-async def run_fast_parser(edrpou_list, concurrency=4, proxy_file=None):
+async def run_fast_parser(edrpou_list, concurrency=4, proxy_file=None, autosave_every=10):
     cookies = pickle.load(open("cookies.pkl", "rb"))
     cookie_dict = {c["name"]: c["value"] for c in cookies}
 
@@ -161,18 +161,35 @@ async def run_fast_parser(edrpou_list, concurrency=4, proxy_file=None):
     connector = aiohttp.TCPConnector(limit_per_host=concurrency, ssl=False)
     timeout = aiohttp.ClientTimeout(total=45)
 
+    results = []
+    output_file = "youcontrol_fast.csv"
+
     async with aiohttp.ClientSession(headers=headers, cookies=cookie_dict, connector=connector, timeout=timeout) as session:
         sem = asyncio.Semaphore(concurrency)
-        tasks = []
 
-        for code in edrpou_list:
-            async def bounded_fetch(c=code):
-                async with sem:
-                    await asyncio.sleep(random.uniform(0.4, 1.2))
-                    return await fetch_company(session, c, proxies=proxies)
-            tasks.append(asyncio.create_task(bounded_fetch()))
+        async def bounded_fetch(c):
+            async with sem:
+                await asyncio.sleep(random.uniform(0.4, 1.2))
+                return await fetch_company(session, c, proxies=proxies)
 
-        return await asyncio.gather(*tasks)
+        # головний цикл з поступовим виконанням і збереженням
+        for idx, code in enumerate(edrpou_list, start=1):
+            result = await bounded_fetch(code)
+            results.append(result)
+
+            # автозбереження кожні autosave_every компаній
+            if idx % autosave_every == 0:
+                df_partial = pd.DataFrame(results)
+                df_partial.to_csv(output_file, index=False, encoding="utf-8-sig")
+                logger.info(f"Проміжне збереження після {idx} компаній → {output_file}")
+
+        # фінальне збереження (на випадок, якщо кількість не кратна autosave_every)
+        df_out = pd.DataFrame(results)
+        df_out.to_csv(output_file, index=False, encoding="utf-8-sig")
+        logger.info(f"Фінальне збереження → {output_file}")
+
+    return results
+
 
 # ----------------------------------------------------------
 # Entrypoint
