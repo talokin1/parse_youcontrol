@@ -14,7 +14,28 @@
 
 сегментація за каналами обслуговування (відділення, мобільний банкінг, контакт-центр).
 
+----
+Integration of customer feedback (NPS) into the main Retail dataset to improve model accuracy and understanding of customer satisfaction.
+1. Data collection and analysis
+NPS data was obtained in .xlsx format from the RassakhatskyiO Team.
+Preliminary analysis was conducted to determine key metrics:
+customer loyalty level (Promoters / Passives / Detractors);
+survey completion frequency;
+segmentation by service channels (branches, mobile banking, contact center).
 
+Translated with DeepL.com (free version)
+
+
+
+
+
+
+
+
+
+
+
+----
 
 2. Інтеграція у Retail Dataset
 
@@ -31,6 +52,24 @@ nps_category — категорія клієнта (Detractor / Passive / Promot
 Підготовка даних до використання у моделях ML (нормалізація, відсутні значення).
 
 
+---
+Інтеграція у Retail Dataset
+
+Об’єднання з основним Retail датасетом за клієнтським ідентифікатором.
+
+Формування нових ознак:
+
+nps_score — числовий показник задоволеності;
+
+nps_trend — динаміка зміни NPS у часі;
+
+nps_category — категорія клієнта (Detractor / Passive / Promoter).
+
+Підготовка даних до використання у моделях ML (нормалізація, відсутні значення).
+
+
+
+---
 
 
 3. Тестування у DS-моделях
@@ -54,3 +93,26 @@ nps_category — категорія клієнта (Detractor / Passive / Promot
 Використання NPS як додаткового індикатора “Golden Client Experience”.
 
 
+
+Testing in DS models
+
+Transferring the updated dataset to the Data Science Retail team.
+
+Conducting experiments:
+
+comparing old models and updated ones with NPS indicators;
+
+evaluating the change in F1-score for each model.
+
+Expected result — increased accuracy of customer behavior forecasting (churn, cross-sell, retention).
+
+Expected effect
+
+Integration of emotional and behavioral components into financial analytics.
+
+Improved targeting of customers with low loyalty.
+
+Use of NPS as an additional indicator of “Golden Client Experience.”
+
+
+Translated with DeepL.com (free version)
