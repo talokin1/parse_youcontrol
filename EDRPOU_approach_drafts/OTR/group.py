@@ -1,39 +1,30 @@
 import pandas as pd
 
-# 1️⃣ Словник відповідності ID → Назва області
-region_dict = {
-    1: "АР Крим",
-    2: "Вінницька",
-    3: "Волинська",
-    4: "Дніпропетровська",
-    5: "Донецька",
-    6: "Житомирська",
-    # ... допиши решту при потребі
-}
-
-# 2️⃣ Додаємо назву регіону у DataFrame
-df["region"] = df["ADDRESS_ID"].map(region_dict)
-
-# 3️⃣ Агрегуємо кількість клієнтів по кожному кластеру та регіону
-region_info = (
-    df.groupby(["region", "CLUSTER"])
-    .agg(CLIENTS=("CONTRAGENTID", "count"))
-    .reset_index()
+# Зчитуємо тільки потрібний діапазон
+df = pd.read_excel(
+    "your_file.xlsx",
+    usecols="G:AJ",
+    skiprows=235,
+    nrows=56
 )
 
-# 4️⃣ Робимо зведену таблицю (кластер — рядки, регіони — стовпці)
-region_pivot = (
-    pd.pivot_table(
-        region_info,
-        index="CLUSTER",
-        columns="region",
-        values="CLIENTS",
-        fill_value=0
-    )
-    .reset_index()
-)
+# Назви регіонів беремо з першого рядка, якщо є
+regions = df.columns.tolist()
 
-# 5️⃣ Зберігаємо результат
-region_pivot.to_excel("regions.xlsx", index=False)
+# Функція для формування тексту з відсотками >7
+def summarize_regions(row):
+    result = []
+    for region in regions:
+        try:
+            value = float(str(row[region]).replace('%', '').strip())
+            if value > 7:
+                result.append(f"{region} ({value:.0f}%)")
+        except:
+            continue
+    return ', '.join(result) if result else '-'
 
-print("✅ Таблицю regions.xlsx успішно створено!")
+# Додаємо нову колонку збоку
+df['Регіони >7%'] = df.apply(summarize_regions, axis=1)
+
+# Зберігаємо результат
+df.to_excel("regions_summary.xlsx", index=False)
