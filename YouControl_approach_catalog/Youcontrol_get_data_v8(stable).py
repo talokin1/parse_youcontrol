@@ -10,13 +10,7 @@ import pandas as pd
 import cloudscraper
 from uuid import uuid4
 
-# === ЛОГІН ДЛЯ DATAIMPULSE (опціонально) ===
-# DATAIMPULSE_LOGIN = "703846583e3f144c34e4"
-# DATAIMPULSE_PASS = "aac7709c4b153b28"
-# DATAIMPULSE_HOST = "gw.dataimpulse.com"
-# DATAIMPULSE_PORT = 823
 
-# === Глобальні налаштування ===
 URL_BASE = "https://youcontrol.com.ua/catalog/kved/"
 CHECKPOINT_FILE = "checkpoint.json"
 
@@ -30,7 +24,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# === Cloudflare-safe scraper ===
 scraper = cloudscraper.create_scraper(
     delay=10,
     browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
@@ -44,33 +37,95 @@ USER_AGENTS = [
 ]
 
 
+REQUEST_COUNT = 0
+scraper = cloudscraper.create_scraper(
+    delay=10,
+    browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
+)
+
+REFERERS = [
+    "https://youcontrol.com.ua/catalog/",
+    "https://youcontrol.com.ua/catalog/kved/",
+    "https://google.com/",
+    "https://www.bing.com/search?q=kved",
+    "https://duckduckgo.com/?q=youcontrol",
+]
+
+
 def get_headers():
+    """Динамічні Cloudflare-friendly заголовки."""
     return {
         "User-Agent": random.choice(USER_AGENTS),
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9",
+        "Accept": random.choice([
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "text/html,application/xhtml+xml;q=0.8,image/webp,*/*;q=0.5"
+        ]),
+        "Accept-Language": random.choice([
+            "en-US,en;q=0.9",
+            "uk-UA,uk;q=0.9,en;q=0.8",
+            "ru-RU,ru;q=0.9,en;q=0.8",
+        ]),
+        "Referer": random.choice(REFERERS),
         "Connection": "keep-alive",
-        "Referer": "https://youcontrol.com.ua/catalog/kved/",
         "Upgrade-Insecure-Requests": "1",
+        "DNT": str(random.choice([0, 1])),
+        "Cache-Control": random.choice(["max-age=0", "no-cache"]),
     }
 
 
-def smart_sleep(base_min=5, base_max=15):
-    """Випадкова пауза між запитами."""
-    delay = random.uniform(base_min, base_max)
-    logger.info(f"Sleeping {delay:.1f}s...")
+
+def smart_sleep(base_min=1.5, base_max=3.5, jitter=0.8):
+    """Коротка адаптивна пауза, з випадковістю та антидетектом."""
+
+    delay = random.uniform(base_min, base_max) + random.uniform(0, jitter)
+    logger.info(f"Sleeping {delay:.2f}s...")
     time.sleep(delay)
 
 
-def click_on_link(url, max_retries=5, long_wait=1800):
-    """Cloudflare-safe request із повторними спробами."""
+def human_delay():
+    if random.random() < 0.2:
+        read_time = random.uniform(2, 6)
+        logger.info(f"Emulating user reading for {read_time:.1f}s...")
+        time.sleep(read_time)
+
+
+
+
+def click_on_link(url, max_retries=6, long_wait=1800):
+    """
+    Cloudflare-safe запит із антидетектом та сесійною ротацією.
+    """
+    global REQUEST_COUNT, scraper
+
+    REQUEST_COUNT += 1
+    REQUEST_COUNT += 1
+
+    if REQUEST_COUNT % 10000 == 0:
+        logger.info("🔄 Restarting process to refresh global state.")
+        save_checkpoint({"last_url": None})
+        os.execv(sys.executable, ['python'] + sys.argv)
+
+
+    if REQUEST_COUNT % 80 == 0:
+        logger.info("Rotating scraper fingerprint (new Cloudflare session)")
+        scraper = cloudscraper.create_scraper(
+            delay=random.randint(8, 15),
+            browser={'browser': random.choice(['chrome', 'firefox']),
+                     'platform': random.choice(['windows', 'linux']),
+                     'mobile': random.choice([False, True])}
+        )
+        smart_sleep(3, 6)
+
     attempt = 0
     while True:
         try:
-            logger.info(f"[{attempt+1}] Fetching {url}")
-            resp = scraper.get(url, headers=get_headers(), timeout=60)
+            logger.info(f"[{attempt + 1}] Fetching {url}")
+            headers = get_headers()
+
+            resp = scraper.get(url, headers=headers, timeout=(10, 40))
 
             if resp.status_code == 200:
+                smart_sleep(1.0, 2.0)
                 return bs4.BeautifulSoup(resp.text, "lxml")
 
             elif resp.status_code in [429, 500, 502, 503, 504]:
@@ -80,9 +135,20 @@ def click_on_link(url, max_retries=5, long_wait=1800):
                 attempt += 1
                 continue
 
+            elif resp.status_code == 403:
+                logger.warning("Cloudflare block detected Rotating fingerprint and restarting process")
+                save_checkpoint({"last_url": None})
+                time.sleep(random.uniform(10, 20))
+                logger.info("Restarting process to refresh global state...")
+                os.execv(sys.executable, ['python'] + sys.argv)
+
+                time.sleep(random.uniform(15, 30))
+                attempt += 1
+                continue
+
             else:
-                logger.error(f"Unexpected HTTP {resp.status_code}, waiting 5 min")
-                time.sleep(300)
+                logger.error(f"Unexpected HTTP {resp.status_code}, waiting 2h")
+                time.sleep(7200)
                 attempt = 0
 
         except Exception as e:
@@ -101,7 +167,7 @@ def load_checkpoint():
         with open(CHECKPOINT_FILE, "r", encoding="utf-8") as f:
             try:
                 data = json.load(f)
-                logger.info(f"✅ Checkpoint loaded: {data}")
+                logger.info(f"Checkpoint loaded: {data}")
                 return data
             except json.JSONDecodeError:
                 logger.warning("Checkpoint corrupted, ignoring.")
@@ -209,16 +275,23 @@ def parse_all_kved():
 
                 pagination = html_class.find("ul", class_="pagination")
                 max_page = 1
+                pagination = html_class.find("ul", class_="pagination")
                 if pagination:
-                    for li in pagination.find_all("li"):
-                        a = li.find("a")
-                        if a and a.text.isdigit():
-                            max_page = max(max_page, int(a.text))
+                    page_numbers = [
+                        int(a.text) for a in pagination.find_all("a") if a.text.isdigit()
+                    ]
+                    if page_numbers:
+                        max_page = max(page_numbers)
+                    else:
+                        max_page = 1
+
 
                 logger.info(f"Parsing class {class_code}, {max_page} pages total.")
                 time.sleep(1.4)
 
                 batch = []
+                records_since_last_save = 0
+
                 for page in range(1, max_page + 1):
                     url_page = f"{url_class}?page={page}"
                     html_page = click_on_link(url_page)
@@ -230,7 +303,6 @@ def parse_all_kved():
                         company_code = comp.text.split(",")[0].strip()
                         url_details = "https://youcontrol.com.ua" + comp.get("href")
 
-                        # Якщо є чекпоінт - пропускаємо до нього
                         if last_url:
                             if url_details == last_url:
                                 logger.info(f"Resuming from {url_details}")
@@ -253,35 +325,37 @@ def parse_all_kved():
                         data = fetch_company_details(company_code, url_details, meta)
                         if data:
                             batch.append(data)
-                            logger.info(f"Added company {company_code} ({len(batch)} in buffer)")
+                            records_since_last_save += 1
+                            human_delay()
 
-                        if len(batch) >= 5:
-                            df = pd.DataFrame(batch)
-                            file_name = f"kved_{class_code}_p{page}_{uuid4().hex[:6]}.csv"
-                            df.to_csv(file_name, index=False)
-                            logger.info(f"Saved {len(batch)} rows - {file_name}")
-                            batch = []
-                            save_checkpoint({"last_url": url_details})
-                            smart_sleep(20, 40)
+                            if records_since_last_save >= 50:
+                                df = pd.DataFrame(batch)
+                                file_name = f"kved_{class_code}_batch_{uuid4().hex[:6]}.csv"
+                                df.to_csv(file_name, index=False)
+                                logger.info(f"Saved {len(batch)} rows → {file_name}")
+                                save_checkpoint({"last_url": url_details})
+                                batch.clear()
+                                records_since_last_save = 0
+                                smart_sleep(20, 40)
 
                         smart_sleep(3, 8)
 
-                    # Після сторінки зберегти чекпоінт
-                    save_checkpoint({"last_url": url_page})
-                    if batch:
-                        df = pd.DataFrame(batch)
-                        file_name = f"kved_{class_code}_p{page}_{uuid4().hex[:6]}.csv"
-                        df.to_csv(file_name, index=False)
-                        logger.info(f"💾 Saved remaining {len(batch)} rows → {file_name}")
-                        batch = []
+                if batch:
+                    df = pd.DataFrame(batch)
+                    file_name = f"kved_{class_code}_final_{uuid4().hex[:6]}.csv"
+                    df.to_csv(file_name, index=False)
+                    logger.info(f"Saved remaining {len(batch)} rows → {file_name}")
 
-                    smart_sleep(15, 30)
+
+
+
+                    smart_sleep(6, 10)
 
                 save_checkpoint({"last_url": None})
-                logger.info(f"✅ Completed class {class_code}")
-                smart_sleep(30, 60)
+                logger.info(f"Completed class {class_code}")
+                smart_sleep(15, 25)
 
-    logger.info("🎉 Completed parsing all KVEDs.")
+    logger.info("Completed parsing all KVEDs.")
 
 
 if __name__ == "__main__":
