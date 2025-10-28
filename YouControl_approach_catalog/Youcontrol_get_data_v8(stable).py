@@ -98,7 +98,6 @@ def click_on_link(url, max_retries=6, long_wait=1800):
     global REQUEST_COUNT, scraper
 
     REQUEST_COUNT += 1
-    REQUEST_COUNT += 1
 
     if REQUEST_COUNT % 100 == 0:
         logger.info("Restarting process to refresh global state.")
@@ -328,7 +327,7 @@ def parse_all_kved():
                             records_since_last_save += 1
                             human_delay()
 
-                            if records_since_last_save >= 50:
+                            if records_since_last_save >= 5:
                                 df = pd.DataFrame(batch)
                                 file_name = f"kved_{class_code}_batch_{uuid4().hex[:6]}.csv"
                                 df.to_csv(file_name, index=False)
