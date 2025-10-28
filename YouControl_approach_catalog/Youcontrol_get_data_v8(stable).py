@@ -100,8 +100,8 @@ def click_on_link(url, max_retries=6, long_wait=1800):
     REQUEST_COUNT += 1
     REQUEST_COUNT += 1
 
-    if REQUEST_COUNT % 10000 == 0:
-        logger.info("🔄 Restarting process to refresh global state.")
+    if REQUEST_COUNT % 100 == 0:
+        logger.info("Restarting process to refresh global state.")
         save_checkpoint({"last_url": None})
         os.execv(sys.executable, ['python'] + sys.argv)
 
