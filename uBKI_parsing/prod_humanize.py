@@ -1,49 +1,37 @@
-def humanize_number(value):
-    """Перетворює великі числа у читабельний бізнес-формат."""
-    try:
-        value = float(value)
-    except (ValueError, TypeError):
-        return value
+import pandas as pd
 
-    if abs(value) >= 1_000_000_000:
-        return f"{value/1_000_000_000:.2f}B"
-    elif abs(value) >= 1_000_000:
-        return f"{value/1_000_000:.2f}M"
-    elif abs(value) >= 1_000:
-        return f"{value/1_000:.2f}K"
-    else:
-        return f"{value:.2f}"
+regions = pd.read_excel("regions.xlsx")
 
+# Загальна кількість клієнтів у кожному кластері
+totals = {0: 311, 1: 431, 2: 23, 3: 49}
 
-for _, row in products.iterrows():
-    income = row["INCOME"]
-    liabilites = row["LIABILITIES"]
-    asstes = row["ASSETS"]
-    credit_cards = row["CREDIT_CARDS"]
-    debit_cards = row["DEBIT_CARDS"]
-    cur_acc = row["CUR_ACCOUNTS"]
-    savings = row["SAVINGS"]
-    savings_amt = row["AMT_SAVING"]
-    deposits = row["DEPOSITS"]
-    deposits_amt = row["AMT_DEPOSITS"]
-    digital_active = row["DIGITAL_ACTIVE"]
-    client_income = row["CLIENT_INCOME"]
-    swift = row["SWIFT"]
-    securites = row["SECURITIES"]
+# Копія таблиці для обчислення відсотків
+percentages = regions.copy()
 
-    print(f"""
-==============================
-Income:            {humanize_number(income)} ₴
-Liabilities:       {humanize_number(liabilites)} ₴
-Assets:            {humanize_number(asstes)} ₴
-Credit cards:      {credit_cards:.1f}
-Debit cards:       {debit_cards:.1f}
-Current accounts:  {cur_acc:.1f}
-Savings:           {savings:.1f} ({humanize_number(savings_amt)} ₴)
-Deposits:          {deposits:.1f} ({humanize_number(deposits_amt)} ₴)
-Digital active:    {digital_active:.1%}
-Client income:     {humanize_number(client_income)} ₴
-SWIFT:             {swift:.1%}
-Securities:        {humanize_number(securites)} ₴
-==============================
-""")
+# Обчислюємо відсотки для кожного регіону у кожному кластері
+for idx, row in regions.iterrows():
+    cluster = row["# CLUSTERS"]
+    total = totals.get(cluster, 1)  # захист від ділення на нуль
+    for col in regions.columns[1:]:
+        percentages.loc[idx, col] = (row[col] / total) * 100
+
+# Знаходимо топ-регіони (в межах 90% від максимуму)
+leaders = {}
+
+for idx, row in percentages.iterrows():
+    cluster = row["# CLUSTERS"]
+    region_percentages = row[1:]
+    max_percent = region_percentages.max()
+    
+    # усі регіони, які >= 90% від максимуму
+    top_regions = region_percentages[region_percentages >= 0.9 * max_percent]
+    top_regions = {col.replace("# ", ""): round(val, 2) for col, val in top_regions.items()}
+    
+    leaders[cluster] = top_regions
+
+# Вивід результатів
+for cluster, tops in leaders.items():
+    print(f"=== Кластер {cluster} ===")
+    for region, pct in tops.items():
+        print(f" {region}: {pct:.2f}%")
+    print()
