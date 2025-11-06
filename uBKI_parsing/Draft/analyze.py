@@ -1,12 +1,13 @@
 import pandas as pd
 import re
 
-def find_clients_using_foreign_acquiring(df: pd.DataFrame):
+def find_self_acquiring_clients(df: pd.DataFrame):
     """
-    Визначає корпоративних клієнтів банку, які користуються еквайрингом інших банків.
+    Визначає корпоративних клієнтів банку, які користуються еквайрингом інших банків,
+    і отримують кошти на власний рахунок (self-transfer).
     """
 
-    # 1️⃣ Патерни еквайрингу
+    # --- 1. Ключові патерни еквайрингу ---
     patterns = [
         "еквайринг", "екваїринг", "інтернет-еквайринг", "платіжний термінал",
         "виторг за картками", "надходження від покупців", "кошти від покупців",
@@ -17,27 +18,36 @@ def find_clients_using_foreign_acquiring(df: pd.DataFrame):
     ]
     regex = "|".join([re.escape(p) for p in patterns])
 
-    # 2️⃣ Фільтр: наш клієнт і призначення з ознаками еквайрингу
-    mask = (
-        df["CONTRAGENTAID"].notna() &  # наш клієнт
+    # --- 2. Фільтруємо наших клієнтів (з ненульовим CONTRAGENTAID) ---
+    df = df[df["CONTRAGENTAID"].notna()].copy()
+
+    # --- 3. Ознаки еквайрингу в призначенні ---
+    df["is_acquiring_related"] = (
         df["PLATPURPOSE"].fillna("").str.lower().str.contains(regex)
     )
 
-    acquiring_clients = df.loc[mask, [
-        "CONTRAGENTAIDENTIFYCODE", "CONTRAGENTA", "BANKAID", "BANKBID",
+    # --- 4. Клієнт перекидає сам собі ---
+    df["is_self_transfer"] = (
+        df["CONTRAGENTAIDENTIFYCODE"].astype(str) == df["CONTRAGENTBIDENTIFYCODE"].astype(str)
+    )
+
+    # --- 5. Залишаємо тільки потрібні кейси ---
+    result = df[
+        df["is_acquiring_related"] & df["is_self_transfer"]
+    ][[
+        "CONTRAGENTAIDENTIFYCODE", "CONTRAGENTA",
+        "BANKAID", "BANKBID",
         "SUMMAEQ", "PLATPURPOSE"
     ]].copy()
 
-    # 3️⃣ Нормалізація
-    acquiring_clients["PLATPURPOSE"] = acquiring_clients["PLATPURPOSE"].str.strip()
-    acquiring_clients = acquiring_clients.drop_duplicates()
+    # --- 6. Прибираємо дублі та очищаємо ---
+    result["PLATPURPOSE"] = result["PLATPURPOSE"].str.strip()
+    result = result.drop_duplicates()
 
-    return acquiring_clients
+    return result
 
 
 # === 🔧 Приклад використання ===
 # df = pd.read_parquet(r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_10.parquet")
-# clients_using_other_acquiring = find_clients_using_foreign_acquiring(df)
-
-# === Топ-20 за сумою ===
-# clients_using_other_acquiring.groupby("CONTRAGENTA").agg({"SUMMAEQ": "sum"}).sort_values("SUMMAEQ", ascending=False).head(20)
+# self_acquiring_clients = find_self_acquiring_clients(df)
+# print(self_acquiring_clients.head(10))
