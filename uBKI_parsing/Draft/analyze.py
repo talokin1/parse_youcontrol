@@ -1,13 +1,20 @@
 import pandas as pd
 import re
 
-def find_self_acquiring_clients(df: pd.DataFrame):
-    """
-    Визначає корпоративних клієнтів банку, які користуються еквайрингом інших банків,
-    і отримують кошти на власний рахунок (self-transfer).
-    """
+# === 1. Шляхи до parquet-файлів ===
+files = [
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_02.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_03.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_04.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_05.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_06.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_08.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_09.parquet",
+    r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_10.parquet",
+]
 
-    # --- 1. Ключові патерни еквайрингу ---
+# === 2. Функція для пошуку еквайрингових self-переказів ===
+def find_self_acquiring_clients(df: pd.DataFrame, period_label: str):
     patterns = [
         "еквайринг", "екваїринг", "інтернет-еквайринг", "платіжний термінал",
         "виторг за картками", "надходження від покупців", "кошти від покупців",
@@ -18,36 +25,67 @@ def find_self_acquiring_clients(df: pd.DataFrame):
     ]
     regex = "|".join([re.escape(p) for p in patterns])
 
-    # --- 2. Фільтруємо наших клієнтів (з ненульовим CONTRAGENTAID) ---
-    df = df[df["CONTRAGENTAID"].notna()].copy()
+    df = df[df["CONTRAGENTAID"].notna()].copy()  # наші клієнти
 
-    # --- 3. Ознаки еквайрингу в призначенні ---
     df["is_acquiring_related"] = (
         df["PLATPURPOSE"].fillna("").str.lower().str.contains(regex)
     )
 
-    # --- 4. Клієнт перекидає сам собі ---
     df["is_self_transfer"] = (
         df["CONTRAGENTAIDENTIFYCODE"].astype(str) == df["CONTRAGENTBIDENTIFYCODE"].astype(str)
     )
 
-    # --- 5. Залишаємо тільки потрібні кейси ---
     result = df[
         df["is_acquiring_related"] & df["is_self_transfer"]
     ][[
         "CONTRAGENTAIDENTIFYCODE", "CONTRAGENTA",
-        "BANKAID", "BANKBID",
-        "SUMMAEQ", "PLATPURPOSE"
+        "BANKAID", "BANKBID", "SUMMAEQ", "PLATPURPOSE"
     ]].copy()
 
-    # --- 6. Прибираємо дублі та очищаємо ---
+    result["period"] = period_label
     result["PLATPURPOSE"] = result["PLATPURPOSE"].str.strip()
     result = result.drop_duplicates()
 
     return result
 
 
-# === 🔧 Приклад використання ===
-# df = pd.read_parquet(r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_10.parquet")
-# self_acquiring_clients = find_self_acquiring_clients(df)
-# print(self_acquiring_clients.head(10))
+# === 3. Зчитування та аналіз усіх місяців ===
+all_results = []
+
+for path in files:
+    match = re.search(r"data_trxs_(\d{4})_(\d{2})", path)
+    if match:
+        year, month = match.groups()
+        period = f"{year}-{month}"
+        print(f"📂 Обробляю {period} ...")
+
+        df = pd.read_parquet(path)
+        month_df = find_self_acquiring_clients(df, period)
+        all_results.append(month_df)
+
+print("✅ Усі файли оброблені")
+
+# === 4. Об'єднання результатів по всіх місяцях ===
+merged = pd.concat(all_results, ignore_index=True)
+
+# === 5. Зведена таблиця по кожному клієнту ===
+summary = (
+    merged.groupby(["CONTRAGENTAIDENTIFYCODE", "CONTRAGENTA"])
+    .agg(
+        n_txn=("SUMMAEQ", "count"),
+        total_sum=("SUMMAEQ", "sum"),
+        months_active=("period", "nunique"),
+        last_month=("period", "max")
+    )
+    .reset_index()
+    .sort_values("total_sum", ascending=False)
+)
+
+# === 6. Збереження результатів ===
+merged.to_csv(r"M:\Controlling\Data_Science_Projects\Corp_Churn\Results\self_acquiring_clients_monthly.csv", index=False)
+summary.to_csv(r"M:\Controlling\Data_Science_Projects\Corp_Churn\Results\self_acquiring_clients_summary.csv", index=False)
+
+print("📊 Збережено результати у Results/self_acquiring_clients_summary.csv")
+
+# === 7. Перевірка топів ===
+print(summary.head(10))
