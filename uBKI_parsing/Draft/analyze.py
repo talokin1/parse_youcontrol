@@ -1,56 +1,43 @@
 import pandas as pd
 import re
 
-def detect_acquiring_transactions(df: pd.DataFrame):
+def find_clients_using_foreign_acquiring(df: pd.DataFrame):
     """
-    Визначає еквайрингові транзакції за текстом PLATPURPOSE
-    та агрегує їх по отримувачу (CONTRAGENTB, CONTRAGENTBIDENTIFIER).
+    Визначає корпоративних клієнтів банку, які користуються еквайрингом інших банків.
     """
 
-    # --- 1. Ключові фрази (UA + EN) ---
+    # 1️⃣ Патерни еквайрингу
     patterns = [
-        # 🇺🇦 українські
-        "еквайринг", "екваїринг", "інтернет-еквайринг", "виторг за картками",
-        "платіжний термінал", "кошти від покупців", "продаж через pos",
-        "надходження від покупців", "оплата карткою", "переказ за pos",
-        # 🇬🇧 англійські
+        "еквайринг", "екваїринг", "інтернет-еквайринг", "платіжний термінал",
+        "виторг за картками", "надходження від покупців", "кошти від покупців",
+        "продаж через pos", "оплата карткою",
         "acquiring", "merchant", "pos terminal", "internet acquiring",
-        "card revenue", "card sales", "customer payments", "terminal payment",
-        "purchase via pos", "sales via pos", "card income", "card payment"
+        "card revenue", "card sales", "customer payments",
+        "terminal payment", "sales via pos", "card income", "payment card"
     ]
     regex = "|".join([re.escape(p) for p in patterns])
 
-    # --- 2. Створюємо прапорець ---
-    df["is_acquiring_related"] = (
-        df["PLATPURPOSE"]
-        .fillna("")
-        .str.lower()
-        .str.contains(regex)
+    # 2️⃣ Фільтр: наш клієнт і призначення з ознаками еквайрингу
+    mask = (
+        df["CONTRAGENTAID"].notna() &  # наш клієнт
+        df["PLATPURPOSE"].fillna("").str.lower().str.contains(regex)
     )
 
-    acquiring_df = df[df["is_acquiring_related"]].copy()
+    acquiring_clients = df.loc[mask, [
+        "CONTRAGENTAIDENTIFYCODE", "CONTRAGENTA", "BANKAID", "BANKBID",
+        "SUMMAEQ", "PLATPURPOSE"
+    ]].copy()
 
-    # --- 3. Агрегуємо по отримувачу ---
-    agg = (
-        acquiring_df.groupby(
-            ["CONTRAGENTBIDENTIFIER", "CONTRAGENTB"], dropna=False
-        )
-        .agg(
-            n_txn=("PLATPURPOSE", "count"),
-            total_sum=("SUMMAEQ", "sum"),
-            example_purpose=("PLATPURPOSE", lambda x: x.iloc[0][:100] + "..." if len(x.iloc[0]) > 100 else x.iloc[0]),
-        )
-        .reset_index()
-        .sort_values("total_sum", ascending=False)
-    )
+    # 3️⃣ Нормалізація
+    acquiring_clients["PLATPURPOSE"] = acquiring_clients["PLATPURPOSE"].str.strip()
+    acquiring_clients = acquiring_clients.drop_duplicates()
 
-    return acquiring_df, agg
+    return acquiring_clients
 
 
-# === Приклад використання ===
-# df = pd.read_csv("transactions.csv")
-# acquiring_df, agg = detect_acquiring_transactions(df)
+# === 🔧 Приклад використання ===
+# df = pd.read_parquet(r"M:\Controlling\Data_Science_Projects\Corp_Churn\Data\Raw\data_trxs_2025_10.parquet")
+# clients_using_other_acquiring = find_clients_using_foreign_acquiring(df)
 
-# print("🔹 Знайдено еквайрингових транзакцій:", len(acquiring_df))
-# print("🔹 Топ-10 потенційних клієнтів для еквайрингу:")
-# print(agg.head(10))
+# === Топ-20 за сумою ===
+# clients_using_other_acquiring.groupby("CONTRAGENTA").agg({"SUMMAEQ": "sum"}).sort_values("SUMMAEQ", ascending=False).head(20)
