@@ -1,27 +1,26 @@
 import pandas as pd
 import re
 
-def detect_acquiring_transactions(df: pd.DataFrame) -> pd.DataFrame:
+def detect_acquiring_transactions(df: pd.DataFrame):
     """
-    Визначає еквайрингові транзакції за текстом у полі PLATPURPOSE
-    і агрегує по отримувачу (CONTRAGENTB).
+    Визначає еквайрингові транзакції за текстом PLATPURPOSE
+    та агрегує їх по отримувачу (CONTRAGENTB, CONTRAGENTBIDENTIFIER).
     """
 
-    # --- 1. Ключові патерни (UA + EN) ---
+    # --- 1. Ключові фрази (UA + EN) ---
     patterns = [
         # 🇺🇦 українські
-        "еквайринг", "екваїринг", "pos", "інтернет-еквайринг",
-        "платіжний термінал", "виторг за картками", "кошти від покупців",
-        "надходження від покупців", "продаж через pos", "оплата карткою",
+        "еквайринг", "екваїринг", "інтернет-еквайринг", "виторг за картками",
+        "платіжний термінал", "кошти від покупців", "продаж через pos",
+        "надходження від покупців", "оплата карткою", "переказ за pos",
         # 🇬🇧 англійські
         "acquiring", "merchant", "pos terminal", "internet acquiring",
-        "card revenue", "card sales", "customer payments",
-        "transaction fee", "terminal payment", "purchase via pos",
-        "sales via pos", "payment card", "card income"
+        "card revenue", "card sales", "customer payments", "terminal payment",
+        "purchase via pos", "sales via pos", "card income", "card payment"
     ]
     regex = "|".join([re.escape(p) for p in patterns])
 
-    # --- 2. Детекція ---
+    # --- 2. Створюємо прапорець ---
     df["is_acquiring_related"] = (
         df["PLATPURPOSE"]
         .fillna("")
@@ -31,24 +30,27 @@ def detect_acquiring_transactions(df: pd.DataFrame) -> pd.DataFrame:
 
     acquiring_df = df[df["is_acquiring_related"]].copy()
 
-    # --- 3. Агрегація по отримувачу ---
+    # --- 3. Агрегуємо по отримувачу ---
     agg = (
-        acquiring_df.groupby("CONTRAGENTB")
+        acquiring_df.groupby(
+            ["CONTRAGENTBIDENTIFIER", "CONTRAGENTB"], dropna=False
+        )
         .agg(
             n_txn=("PLATPURPOSE", "count"),
-            total_sum=("AMOUNT", "sum"),
-            example_purpose=("PLATPURPOSE", lambda x: x.iloc[0][:120] + "..." if len(x.iloc[0]) > 120 else x.iloc[0])
+            total_sum=("SUMMAEQ", "sum"),
+            example_purpose=("PLATPURPOSE", lambda x: x.iloc[0][:100] + "..." if len(x.iloc[0]) > 100 else x.iloc[0]),
         )
         .reset_index()
         .sort_values("total_sum", ascending=False)
     )
 
-    return agg, acquiring_df
+    return acquiring_df, agg
 
 
+# === Приклад використання ===
+# df = pd.read_csv("transactions.csv")
+# acquiring_df, agg = detect_acquiring_transactions(df)
 
-
-agg, acquiring_df = detect_acquiring_transactions(df)
-
-print("🔹 Топ-10 потенційних клієнтів для еквайрингу:")
-print(agg.head(10))
+# print("🔹 Знайдено еквайрингових транзакцій:", len(acquiring_df))
+# print("🔹 Топ-10 потенційних клієнтів для еквайрингу:")
+# print(agg.head(10))
