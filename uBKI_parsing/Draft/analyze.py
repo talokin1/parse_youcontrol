@@ -1,37 +1,39 @@
-import pandas as pd
+pivot = pd.pivot_table(
+    merged,
+    index="BANKBID",
+    values="SUMMAEQ",
+    aggfunc=["count", "sum"],
+    margins=True,
+    margins_name="TOTAL"
+).round(0)
 
-# === 1. Зчитуємо вихідний Excel ===
-df = pd.read_excel("your_file.xlsx")
+pivot.columns = ["Транзакцій", "Сума грн"]
+pivot = pivot.sort_values("Сума грн", ascending=False)
+print(pivot.head(15))
 
-# === 2. Перетворюємо PRIMARY_SCORE у числовий формат ===
-df["PRIMARY_SCORE"] = (
-    df["PRIMARY_SCORE"].astype(str).str.replace("%", "").astype(float)
-)
 
-# === 3. Створюємо категорії схильності ===
-def categorize(score):
-    if score < 50:
-        return "Low"
-    elif score < 80:
-        return "Medium"
-    else:
-        return "High"
 
-df["PROPENSITY_LEVEL"] = df["PRIMARY_SCORE"].apply(categorize)
+# ---
 
-# === 4. Групування та агрегація ===
-summary = (
-    df.groupby("PROPENSITY_LEVEL")
-    .agg(
-        CLIENTS_COUNT=("IDENTIFYCODE", "nunique"),
-        AVG_INCOME=("INCOME", "mean")
-    )
-    .reset_index()
-    .sort_values("PROPENSITY_LEVEL", key=lambda x: x.map({"Low": 1, "Medium": 2, "High": 3}))
-)
+# за клієнтами
+pivot_clients = pd.pivot_table(
+    summary,
+    index="CONTRAGENTAID",
+    values=["total_sum", "months_active"],
+    aggfunc={"total_sum": "sum", "months_active": "mean"}
+).sort_values(("total_sum", ""), ascending=False)
 
-# === 5. Записуємо в новий лист ===
-with pd.ExcelWriter("your_file.xlsx", engine="openpyxl", mode="a", if_sheet_exists="replace") as writer:
-    summary.to_excel(writer, sheet_name="PropensitySummary", index=False)
 
-print("✅ Лист 'PropensitySummary' успішно додано у файл 'your_file.xlsx'")
+# за місяцями
+pivot_months = pd.pivot_table(
+    merged,
+    index="PERIOD",
+    values="SUMMAEQ",
+    aggfunc=["count", "sum"]
+).sort_index()
+
+
+with pd.ExcelWriter(r"M:\Controlling\Acquiring_Report_2025.xlsx") as writer:
+    summary.to_excel(writer, sheet_name="Детальна база", index=False)
+    pivot.to_excel(writer, sheet_name="Pivot за банками")
+    pivot_months.to_excel(writer, sheet_name="Pivot за місяцями")
