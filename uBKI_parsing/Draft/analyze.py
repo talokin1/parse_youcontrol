@@ -1,25 +1,39 @@
-def normalize_bank_name(name: str) -> str:
-    if not isinstance(name, str):
-        return "Невідомо"
-    n = name.lower()
-    n = n.replace("'", "").replace("«", "").replace("»", "")
-    n = n.replace("ат кб", "").replace("ат", "").replace("пуат", "").strip()
-    n = n.replace("банк", "").replace(" ", "")
-    # ключові слова для групування
-    if "приват" in n:
-        return "ПриватБанк"
-    if "ощад" in n:
-        return "Ощадбанк"
-    if "райф" in n or "aval" in n:
-        return "Райффайзен Банк"
-    if "укргаз" in n:
-        return "Укргазбанк"
-    if "пумб" in n:
-        return "ПУМБ"
-    if "акорд" in n:
-        return "Акордбанк"
-    if "отп" in n:
-        return "OTP Банк"
-    if "сiч" in n or "рад" in n:
-        return "Радабанк"
-    return name.strip()
+pivot = pd.pivot_table(
+    merged,
+    index="BANKBID",
+    values="SUMMAEQ",
+    aggfunc=["count", "sum"],
+    margins=True,
+    margins_name="TOTAL"
+).round(0)
+
+pivot.columns = ["Транзакцій", "Сума грн"]
+pivot = pivot.sort_values("Сума грн", ascending=False)
+print(pivot.head(15))
+
+
+
+# ---
+
+# за клієнтами
+pivot_clients = pd.pivot_table(
+    summary,
+    index="CONTRAGENTAID",
+    values=["total_sum", "months_active"],
+    aggfunc={"total_sum": "sum", "months_active": "mean"}
+).sort_values(("total_sum", ""), ascending=False)
+
+
+# за місяцями
+pivot_months = pd.pivot_table(
+    merged,
+    index="PERIOD",
+    values="SUMMAEQ",
+    aggfunc=["count", "sum"]
+).sort_index()
+
+
+with pd.ExcelWriter(r"M:\Controlling\Acquiring_Report_2025.xlsx") as writer:
+    summary.to_excel(writer, sheet_name="Детальна база", index=False)
+    pivot.to_excel(writer, sheet_name="Pivot за банками")
+    pivot_months.to_excel(writer, sheet_name="Pivot за місяцями")
