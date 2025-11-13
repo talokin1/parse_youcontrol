@@ -1,39 +1,34 @@
-pivot = pd.pivot_table(
-    merged,
-    index="BANKBID",
-    values="SUMMAEQ",
-    aggfunc=["count", "sum"],
-    margins=True,
-    margins_name="TOTAL"
-).round(0)
+import re
+import pandas as pd
 
-pivot.columns = ["Транзакцій", "Сума грн"]
-pivot = pivot.sort_values("Сума грн", ascending=False)
-print(pivot.head(15))
+def is_acquiring_only(series: pd.Series) -> pd.Series:
+    s = series.fillna("").str.lower()
 
+    result = pd.Series(False, index=s.index)
 
+    # 1️⃣ українські + російські форми (гнучко)
+    mask = s.str.contains(
+        r"(екв[\W_]*[ао]?[йиiї]?[рp][иiіїy]?[ннгgґ]?[гk]?)",
+        regex=True
+    )
+    result |= mask
 
-# ---
+    # 2️⃣ чисті російські "экв..."
+    mask = s.str.contains(
+        r"(экв[\W_]*[ао]?[йиi]?[рp][иi]?[нng]?[гk]?)",
+        regex=True
+    )
+    result |= mask
 
-# за клієнтами
-pivot_clients = pd.pivot_table(
-    summary,
-    index="CONTRAGENTAID",
-    values=["total_sum", "months_active"],
-    aggfunc={"total_sum": "sum", "months_active": "mean"}
-).sort_values(("total_sum", ""), ascending=False)
+    # 3️⃣ англійське acquiring
+    mask = s.str.contains(
+        r"\bacquir(ing|er)?\b",
+        regex=True
+    )
+    result |= mask
 
+    return result
 
-# за місяцями
-pivot_months = pd.pivot_table(
-    merged,
-    index="PERIOD",
-    values="SUMMAEQ",
-    aggfunc=["count", "sum"]
-).sort_index()
+df["is_acquiring_related"] = df["PLATPURPOSE"].fillna("").str.lower().str.contains(regex)
 
-
-with pd.ExcelWriter(r"M:\Controlling\Acquiring_Report_2025.xlsx") as writer:
-    summary.to_excel(writer, sheet_name="Детальна база", index=False)
-    pivot.to_excel(writer, sheet_name="Pivot за банками")
-    pivot_months.to_excel(writer, sheet_name="Pivot за місяцями")
+df["is_acquiring_related"] = is_acquiring_only(df["PLATPURPOSE"])
