@@ -1,34 +1,21 @@
-import re
-import pandas as pd
+# 1. Рахуємо кількість банків для кожного клієнта
+bank_counts = merged.groupby("CONTRAGENTAIDENTIFYCODE")["BANKBID"].nunique()
 
-def is_acquiring_only(series: pd.Series) -> pd.Series:
-    s = series.fillna("").str.lower()
+# 2. Вибираємо тільки тих, у кого більше одного банку
+multi_bank_clients = bank_counts[bank_counts > 1].index
 
-    result = pd.Series(False, index=s.index)
+# 3. Фільтруємо merged
+multi_bank_df = merged[merged["CONTRAGENTAIDENTIFYCODE"].isin(multi_bank_clients)]
 
-    # 1️⃣ українські + російські форми (гнучко)
-    mask = s.str.contains(
-        r"(екв[\W_]*[ао]?[йиiї]?[рp][иiіїy]?[ннгgґ]?[гk]?)",
-        regex=True
-    )
-    result |= mask
+# mfo_map = словник BANKBID → NAME
+mfo_map = mfos.set_index("BANKBID")["NAME"]
 
-    # 2️⃣ чисті російські "экв..."
-    mask = s.str.contains(
-        r"(экв[\W_]*[ао]?[йиi]?[рp][иi]?[нng]?[гk]?)",
-        regex=True
-    )
-    result |= mask
+multi_bank_summary = (
+    multi_bank_df.groupby("CONTRAGENTAIDENTIFYCODE")["BANKBID"]
+    .unique()
+    .reset_index()
+)
 
-    # 3️⃣ англійське acquiring
-    mask = s.str.contains(
-        r"\bacquir(ing|er)?\b",
-        regex=True
-    )
-    result |= mask
-
-    return result
-
-df["is_acquiring_related"] = df["PLATPURPOSE"].fillna("").str.lower().str.contains(regex)
-
-df["is_acquiring_related"] = is_acquiring_only(df["PLATPURPOSE"])
+multi_bank_summary["BANKS_USED"] = multi_bank_summary["BANKBID"].apply(
+    lambda lst: ", ".join(mfo_map.get(b, str(b)) for b in lst)
+)
