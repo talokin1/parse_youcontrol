@@ -1,33 +1,32 @@
-# 1. Назви банків
-bank_names = mfos.set_index("BANKBID")["NAME"]
+client_stats = (
+    merged.groupby("CONTRAGENTAIDENTIFYCODE")
+    .agg(
+        n_txn=("SUMMAEQ", "count"),
+        total_sum=("SUMMAEQ", "sum"),
+        months_active=("PERIOD", "nunique"),
+        last_month=("PERIOD", "max"),
+        CONTRAGENTASNAME=("CONTRAGENTASNAME", "first"),
+        CONTRAGENTAID=("CONTRAGENTAID", "first")
+    )
+    .reset_index()
+)
 
-# 2. Групуємо клієнта → всі банки
 banks_per_client = (
     merged.groupby("CONTRAGENTAIDENTIFYCODE")["BANKBID"]
-          .unique()
-          .reset_index()
+    .unique()
+    .reset_index()
 )
+
+bank_names = mfos.set_index("BANKBID")["NAME"]
 
 banks_per_client["BANKS_USED"] = banks_per_client["BANKBID"].apply(
     lambda lst: ", ".join(bank_names.get(x, str(x)) for x in lst)
 )
 
-# 3. Агрегація по клієнту
-summary = (
-    merged.groupby("CONTRAGENTAIDENTIFYCODE")
-    .agg({
-        "CONTRAGENTASNAME": "first",
-        "CONTRAGENTAID": "first",
-        "total_sum": "sum",
-        "n_txn": "sum",
-        "months_active": "max",
-        "last_month": "max"
-    })
-    .reset_index()
+summary_v2 = client_stats.merge(
+    banks_per_client[["CONTRAGENTAIDENTIFYCODE", "BANKS_USED"]],
+    on="CONTRAGENTAIDENTIFYCODE",
+    how="left"
 )
 
-# 4. Додаємо банки
-summary = summary.merge(banks_per_client[["CONTRAGENTAIDENTIFYCODE", "BANKS_USED"]],
-                        on="CONTRAGENTAIDENTIFYCODE", how="left")
-
-summary
+summary_v2 = summary_v2.sort_values("total_sum", ascending=False)
