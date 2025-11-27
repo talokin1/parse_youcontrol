@@ -1,47 +1,50 @@
+import ast
 import pandas as pd
-import re
 
-def parse_kveds(text):
-    # Якщо NaN або порожній рядок
-    if pd.isna(text) or not isinstance(text, str):
-        return [None]*6
+def try_parse(x):
+    if pd.isna(x):
+        return None
+    x = str(x).strip()
+    if x.startswith('[') or x.startswith('{'):
+        try:
+            return ast.literal_eval(x)
+        except:
+            return None
+    return None
 
-    # Розділяємо по крапці з комою
-    parts = [p.strip() for p in text.split(';') if p.strip()]
+def extract_founders(obj):
+    """Повертає список записів, де є ключ 'ПІБ / Назва'."""
+    founders = []
 
-    kved_codes = []
-    kved_names = []
+    if isinstance(obj, list):
+        for item in obj:
+            if isinstance(item, dict) and 'ПІБ / Назва' in item:
+                founders.append(item)
 
-    for part in parts[:3]:   # беремо максимум 3 кведи
-        # Шукаємо шаблон: 73.11 або 46.39 або 88.99 і т.д.
-        match = re.search(r'(\d{2}\.\d{2})', part)
-        if match:
-            code = match.group(1)
-            name = part.split(code, 1)[1].strip()  # назва після коду
-        else:
-            code = None
-            name = part.strip()
+    elif isinstance(obj, dict) and 'ПІБ / Назва' in obj:
+        founders.append(obj)
 
-        kved_codes.append(code)
-        kved_names.append(name)
+    return founders if founders else None
 
-    # Якщо менше 3 — доповнюємо None
-    while len(kved_codes) < 3:
-        kved_codes.append(None)
-        kved_names.append(None)
+cols_to_scan = df.columns.tolist()
 
-    return [
-        kved_codes[0], kved_names[0],
-        kved_codes[1], kved_names[1],
-        kved_codes[2], kved_names[2],
-    ]
+df['Founders_List'] = None
 
-# застосовуємо
-parsed = data["Види діяльності"].apply(parse_kveds)
-parsed = pd.DataFrame(parsed.tolist(), columns=[
-    "KVED_1", "KVED_NAME_1",
-    "KVED_2", "KVED_NAME_2",
-    "KVED_3", "KVED_NAME_3"
-])
+for col in cols_to_scan:
+    df[col] = df[col].apply(try_parse)
 
-df = pd.concat([data, parsed], axis=1)
+    df['Founders_List'] = df.apply(
+        lambda row: (row['Founders_List'] or []) + (extract_founders(row[col]) or []),
+        axis=1
+    )
+
+df['Founders_Names'] = df['Founders_List'].apply(
+    lambda lst: [d['ПІБ / Назва'] for d in lst] if lst else None
+)
+
+max_len = df['Founders_Names'].apply(lambda x: len(x) if x else 0).max()
+
+for i in range(max_len):
+    df[f'Founder_{i+1}'] = df['Founders_Names'].apply(
+        lambda lst: lst[i] if lst and len(lst) > i else None
+    )
