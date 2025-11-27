@@ -2,18 +2,32 @@ import ast
 import pandas as pd
 
 def safe_parse(x):
-    """Спробувати перетворити рядок на Python list/dict."""
-    if pd.isna(x):
-        return None
-
-    x = str(x).strip()
-    if not ((x.startswith("[") and x.endswith("]")) or (x.startswith("{") and x.endswith("}"))):
-        return None
-
+    """Надійно парсить рядки типу '[{...}]' або '{...}'. 
+    Ніколи не падає і не викликає ambiguous truth value."""
+    
+    # 1. Якщо це NaN
     try:
-        return ast.literal_eval(x)
+        if pd.isna(x):
+            return None
+    except:
+        pass  # x не скаляр — просто ігноруємо
+
+    # 2. Перетворюємо у строку
+    try:
+        s = str(x).strip()
     except:
         return None
+
+    # 3. Перевірка що схоже на JSON-like структуру
+    if not ((s.startswith("[") and s.endswith("]")) or (s.startswith("{") and s.endswith("}"))):
+        return None
+
+    # 4. Пробуємо парсити
+    try:
+        return ast.literal_eval(s)
+    except:
+        return None
+
 
 
 def find_columns_with_founders(df):
