@@ -1,55 +1,62 @@
 import pandas as pd
-import numpy as np
+import re
 
-
-file_path = r'C:\Projects\DS-425\Assets for inner clients\KVED_Loans.xlsx'
-kved = pd.read_excel(file_path, dtype={'КВЕД': 'str'})
-
-kved = kved[kved['КВЕД'] != 'Missing value']
-kved = kved[~kved['КВЕД'].isna()]
-
-
-kved['KVED_CODE'] = kved['NACE (from 2025)'].str.extract(r'([A-Z]?)([\d\.]{2,})')[1] 
-
-def extract_kved_v2(text):
-
-    if pd.isna(text):
-        return None
-    
-    parts = text.split('.')
-    num_parts = len(parts)
-
-    if num_parts == 3:
-        return parts[0] + '.' + parts[1] + parts[2]
-    
-    elif num_parts == 2:
-      
-        integer_part = parts[0]
-        decimal_part = parts[1].rstrip('0') 
-        
-        if not decimal_part:
-            return integer_part
-        else:
-            return integer_part + '.' + decimal_part
-        
-    return text
-
-kved['KVED_v_normalized'] = kved['KVED_CODE'].astype(str).apply(extract_kved_v2)
-
-
-kved_map_data = kved[['Risk classification - Jan 2025', 'KVED_v_normalized']]
-kved_map_data.columns = ['Risk', 'KVED']
-
-risk_map = (
-    kved_map_data.groupby("KVED")["Risk"]
-    .apply(lambda x: x.dropna().iloc[0] if not x.dropna().empty else None)
-    .to_dict()
+kved = pd.read_excel(
+    r'C:\Projects\(DS-425) Assets for inner clients\KVED_Loans.xlsx',
+    dtype={'KVED': 'str'}
 )
 
+# беремо тільки рядки, де є опис нового NACE
+kved = kved[~kved['NACE (from 2025)'].isna()]
 
-kved["Risk"] = kved["KVED_v_normalized"].map(risk_map)
+# -----------------------------
+# 1. Функція витягування і нормалізації КВЕД
+# -----------------------------
+def extract_kved(text):
+    if pd.isna(text):
+        return None
+    text = str(text)
 
-kved.rename(columns={"KVED": "FIRM_KVED"}, inplace=True) 
-kved = kved.drop_duplicates()
+    # 1) Спочатку шукаємо трирівневий код: A1.1.1 → 1.11
+    m3 = re.search(r'[A-Z]?(\d+)\.(\d+)\.(\d+)', text)
+    if m3:
+        d1, d2, d3 = m3.groups()
+        # по суті це 01.11, 01.12 і т.д.
+        val = float(f"{int(d1)}.{int(d2)}{int(d3)}")   # 1.11
+        return str(val)                                # '1.11'
 
-kved[['KVED_v_normalized', 'Risk']]
+    # 2) Якщо є тільки два рівні: 1.5, 1.50, 97.0, 97.00
+    m2 = re.search(r'[A-Z]?(\d+)\.(\d+)', text)
+    if m2:
+        d1, d2 = m2.groups()
+        # 1.5 і 1.50 → float(1.5) → '1.5'
+        val = float(f"{int(d1)}.{d2}")
+        return str(val)
+
+    return None
+
+
+# 2. Отримати нормалізований КВЕД
+kved['KVED'] = kved['NACE (from 2025)'].apply(extract_kved)
+
+# викидаємо рядки, де КВЕД не знайшовся
+kved = kved.dropna(subset=['KVED'])
+
+# залишаємо тільки КВЕД і ризик
+kved = kved[['Risk classification - Jan 2025', 'KVED']].copy()
+kved.columns = ['Risk', 'KVED']
+
+# -----------------------------
+# 3. Звести дублікати: для кожного KVED взяти перший не-null Risk
+# -----------------------------
+risk_map = (
+    kved.groupby('KVED')['Risk']
+        .apply(lambda x: x.dropna().iloc[0] if x.dropna().size > 0 else None)
+)
+
+kved = (
+    kved.drop_duplicates(subset=['KVED'])
+        .assign(Risk=lambda df: df['KVED'].map(risk_map))
+)
+
+kved.reset_index(drop=True, inplace=True)
