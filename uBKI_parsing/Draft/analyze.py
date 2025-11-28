@@ -1,112 +1,64 @@
-import ast
 import pandas as pd
+import re
 
-def safe_parse(x):
-    """Надійно парсить рядки типу '[{...}]' або '{...}'. 
-    Ніколи не падає і не викликає ambiguous truth value."""
+kved = pd.read_excel(
+    r'C:\Projects\(DS-425) Assets for inner clients\KVED_Loans.xlsx',
+    dtype={'KVED': 'str'}
+)
+
+# 1) Видалити порожні значення
+kved = kved[~kved['NACE (from 2025)'].isna()]
+
+# 2) Витягнути КВЕД із тексту
+kved['KVED_CODE'] = (
+    kved['NACE (from 2025)']
+    .str.extract(r'([0-9][0-9]?\.\d+)')[0]
+)
+
+# ---------------------------
+# 🔥 УНІВЕРСАЛЬНА НОРМАЛІЗАЦІЯ КВЕД
+# ---------------------------
+def normalize_kved(code):
+    if pd.isna(code):
+        return None
     
-    # 1. Якщо це NaN
-    try:
-        if pd.isna(x):
-            return None
-    except:
-        pass  # x не скаляр — просто ігноруємо
+    # прибрати зайві пробіли
+    code = str(code).strip()
 
-    # 2. Перетворюємо у строку
-    try:
-        s = str(x).strip()
-    except:
+    # витягти тільки числа та крапку
+    match = re.findall(r'\d+', code)
+    if not match:
         return None
+    
+    # варіанти:
+    # ['1','5']  → 1.50
+    # ['1','50'] → 1.50
+    # ['1','5','0'] → 1.50
+    if len(match) == 1:
+        # тільки "1" → invalid
+        return match[0]
+    else:
+        major = int(match[0])        # число перед точкою
+        minor = int(match[1])        # число після точки
+        return f"{major}.{minor:02d}"  # формат A.BB
 
-    # 3. Перевірка що схоже на JSON-like структуру
-    if not ((s.startswith("[") and s.endswith("]")) or (s.startswith("{") and s.endswith("}"))):
-        return None
+# застосувати нормалізацію
+kved['KVED_NORM'] = kved['KVED_CODE'].apply(normalize_kved)
 
-    # 4. Пробуємо парсити
-    try:
-        return ast.literal_eval(s)
-    except:
-        return None
+# 3) Підготувати таблицю: KVED_NORM + Risk
+df = kved[['KVED_NORM', 'Risk classification - Jan 2025']].copy()
+df.columns = ['KVED', 'Risk']
 
+# 4) Вибрати перший не-null Risk для кожного KVED
+risk_map = (
+    df.groupby('KVED')['Risk']
+    .apply(lambda x: x.dropna().iloc[0] if x.dropna().size > 0 else None)
+)
 
+# 5) Додати фінальний Risk
+df['Risk'] = df['KVED'].map(risk_map)
 
-def find_columns_with_founders(df):
-    founder_cols = []
+# 6) Видалити дублікати
+df = df.drop_duplicates()
 
-    for col in df.columns:
-        for val in df[col]:
-            parsed = safe_parse(val)
-
-            # Format: {'ПІБ / Назва': '...'}
-            if isinstance(parsed, dict) and "ПІБ / Назва" in parsed:
-                founder_cols.append(col)
-                break
-
-            # Format: [{'ПІБ / Назва': '...'}, ...]
-            if isinstance(parsed, list):
-                if any(isinstance(item, dict) and "ПІБ / Назва" in item for item in parsed):
-                    founder_cols.append(col)
-                    break
-
-    return founder_cols
-
-
-def extract_all_founders(df, founder_cols):
-    """Створює df['Founders'] як список словників засновників."""
-
-    result = []
-
-    for idx, row in df.iterrows():
-        combined = []
-
-        for col in founder_cols:
-            parsed = safe_parse(row[col])
-
-            # dict
-            if isinstance(parsed, dict) and "ПІБ / Назва" in parsed:
-                combined.append(parsed)
-
-            # list of dicts
-            elif isinstance(parsed, list):
-                for item in parsed:
-                    if isinstance(item, dict) and "ПІБ / Назва" in item:
-                        combined.append(item)
-
-        result.append(combined)
-
-    df["Founders"] = result
-    return df
-
-def expand_founders_column(df, source_col="Founders", max_items=10):
-    result = {}
-
-    for idx, founders in df[source_col].items():
-        entry = {}
-
-        if isinstance(founders, list):
-            for i, founder in enumerate(founders[:max_items], start=1):
-                entry[f"Founder_{i}"] = founder.get("ПІБ / Назва")
-
-        result[idx] = entry
-
-    return pd.DataFrame.from_dict(result, orient="index")
-
-def parse_founders(df, max_founders=10):
-    """Повний ETL-процес по витягненню засновників у правильні колонки."""
-
-    # 1. Знайти колонки з засновниками
-    founder_cols = find_columns_with_founders(df)
-    print("🔍 Знайдені колонки з засновниками:", founder_cols)
-
-    # 2. Створити колонку Founders = список dictів
-    df = extract_all_founders(df, founder_cols)
-
-    # 3. Розкласти у Founder_1, Founder_2, …
-    df_expanded = expand_founders_column(df, "Founders", max_items=max_founders)
-
-    # 4. Додати їх назад у датафрейм
-    df = pd.concat([df, df_expanded], axis=1)
-
-    return df
-
-df = parse_founders(df, max_founders=10)
+df
