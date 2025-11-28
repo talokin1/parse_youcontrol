@@ -1,62 +1,66 @@
 import pandas as pd
 import re
 
-kved = pd.read_excel(
-    r'C:\Projects\(DS-425) Assets for inner clients\KVED_Loans.xlsx',
-    dtype={'KVED': 'str'}
-)
+def find_internet_acquiring_clients(df, period):
 
-# беремо тільки рядки, де є опис нового NACE
-kved = kved[~kved['NACE (from 2025)'].isna()]
+    # ---- 1. Функція для визначення інтернет-еквайрингу ----
+    def is_internet_acquiring(series: pd.Series) -> pd.Series:
+        s = series.fillna("").str.lower()
 
-# -----------------------------
-# 1. Функція витягування і нормалізації КВЕД
-# -----------------------------
-def extract_kved(text):
-    if pd.isna(text):
-        return None
-    text = str(text)
+        result = pd.Series(False, index=s.index)
 
-    # 1) Спочатку шукаємо трирівневий код: A1.1.1 → 1.11
-    m3 = re.search(r'[A-Z]?(\d+)\.(\d+)\.(\d+)', text)
-    if m3:
-        d1, d2, d3 = m3.groups()
-        # по суті це 01.11, 01.12 і т.д.
-        val = float(f"{int(d1)}.{int(d2)}{int(d3)}")   # 1.11
-        return str(val)                                # '1.11'
+        # укр/суржик: інтернет-екв...
+        mask = s.str.contains(r"(?:інтернет|iнтернет)[\s\-_]*екв", regex=True)
+        result |= mask
 
-    # 2) Якщо є тільки два рівні: 1.5, 1.50, 97.0, 97.00
-    m2 = re.search(r'[A-Z]?(\d+)\.(\d+)', text)
-    if m2:
-        d1, d2 = m2.groups()
-        # 1.5 і 1.50 → float(1.5) → '1.5'
-        val = float(f"{int(d1)}.{d2}")
-        return str(val)
+        # рос: интернет-экв...
+        mask = s.str.contains(r"(?:интернет)[\s\-_]*экв", regex=True)
+        result |= mask
 
-    return None
+        # інверсія: екв... інтернет
+        mask = s.str.contains(r"(?:екв|экв).*?(?:інтернет|интернет)", regex=True)
+        result |= mask
 
+        # англ
+        mask = s.str.contains(
+            r"(?:internet|online|e-?commerce|ecomm)[\s\-_]*(?:acquir|gateway)",
+            regex=True
+        )
+        result |= mask
 
-# 2. Отримати нормалізований КВЕД
-kved['KVED'] = kved['NACE (from 2025)'].apply(extract_kved)
+        return result
 
-# викидаємо рядки, де КВЕД не знайшовся
-kved = kved.dropna(subset=['KVED'])
+    # ---- 2. ДЕБЕТОВІ ОПЕРАЦІЇ (клієнт списує гроші) ----
+    debit = df[df["CONTRAGENTAID"].notna()].copy()
+    debit["operation_type"] = "debit"  # клієнт списує
 
-# залишаємо тільки КВЕД і ризик
-kved = kved[['Risk classification - Jan 2025', 'KVED']].copy()
-kved.columns = ['Risk', 'KVED']
+    # ---- 3. КРЕДИТОВІ ОПЕРАЦІЇ (клієнт отримує гроші) ----
+    credit = df[df["CONTRAGENTBID"].notna()].copy()
+    credit["operation_type"] = "credit"  # клієнт отримує
 
-# -----------------------------
-# 3. Звести дублікати: для кожного KVED взяти перший не-null Risk
-# -----------------------------
-risk_map = (
-    kved.groupby('KVED')['Risk']
-        .apply(lambda x: x.dropna().iloc[0] if x.dropna().size > 0 else None)
-)
+    # Об'єднуємо
+    full = pd.concat([debit, credit], ignore_index=True)
 
-kved = (
-    kved.drop_duplicates(subset=['KVED'])
-        .assign(Risk=lambda df: df['KVED'].map(risk_map))
-)
+    # ---- 4. Інтернет-еквайринг ----
+    full["is_internet_acq"] = is_internet_acquiring(full["PLATPURPOSE"])
 
-kved.reset_index(drop=True, inplace=True)
+    # ---- 5. SELF-TRANSFER ----
+    full["is_self"] = (
+        full["CONTRAGENTAIDENTIFYCODE"].astype(str)
+        == full["CONTRAGENTBIDENTIFYCODE"].astype(str)
+    )
+
+    # ---- 6. Відбір еквайрингу ----
+    result = full[
+        full["is_internet_acq"]
+    ][[
+        "CONTRAGENTAIDENTIFYCODE", "CONTRAGENTBIDENTIFYCODE",
+        "CONTRAGENTA", "CONTRAGENTB",
+        "BANKAID", "BANKBID",
+        "SUMMAEQ", "PLATPURPOSE",
+        "operation_type", "is_self"
+    ]].copy()
+
+    result["PERIOD"] = period
+    result = result.drop_duplicates()
+    return result
