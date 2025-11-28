@@ -1,64 +1,55 @@
 import pandas as pd
-import re
+import numpy as np
 
-kved = pd.read_excel(
-    r'C:\Projects\(DS-425) Assets for inner clients\KVED_Loans.xlsx',
-    dtype={'KVED': 'str'}
-)
 
-# 1) Видалити порожні значення
-kved = kved[~kved['NACE (from 2025)'].isna()]
+file_path = r'C:\Projects\DS-425\Assets for inner clients\KVED_Loans.xlsx'
+kved = pd.read_excel(file_path, dtype={'КВЕД': 'str'})
 
-# 2) Витягнути КВЕД із тексту
-kved['KVED_CODE'] = (
-    kved['NACE (from 2025)']
-    .str.extract(r'([0-9][0-9]?\.\d+)')[0]
-)
+kved = kved[kved['КВЕД'] != 'Missing value']
+kved = kved[~kved['КВЕД'].isna()]
 
-# ---------------------------
-# 🔥 УНІВЕРСАЛЬНА НОРМАЛІЗАЦІЯ КВЕД
-# ---------------------------
-def normalize_kved(code):
-    if pd.isna(code):
+
+kved['KVED_CODE'] = kved['NACE (from 2025)'].str.extract(r'([A-Z]?)([\d\.]{2,})')[1] 
+
+def extract_kved_v2(text):
+
+    if pd.isna(text):
         return None
     
-    # прибрати зайві пробіли
-    code = str(code).strip()
+    parts = text.split('.')
+    num_parts = len(parts)
 
-    # витягти тільки числа та крапку
-    match = re.findall(r'\d+', code)
-    if not match:
-        return None
+    if num_parts == 3:
+        return parts[0] + '.' + parts[1] + parts[2]
     
-    # варіанти:
-    # ['1','5']  → 1.50
-    # ['1','50'] → 1.50
-    # ['1','5','0'] → 1.50
-    if len(match) == 1:
-        # тільки "1" → invalid
-        return match[0]
-    else:
-        major = int(match[0])        # число перед точкою
-        minor = int(match[1])        # число після точки
-        return f"{major}.{minor:02d}"  # формат A.BB
+    elif num_parts == 2:
+      
+        integer_part = parts[0]
+        decimal_part = parts[1].rstrip('0') 
+        
+        if not decimal_part:
+            return integer_part
+        else:
+            return integer_part + '.' + decimal_part
+        
+    return text
 
-# застосувати нормалізацію
-kved['KVED_NORM'] = kved['KVED_CODE'].apply(normalize_kved)
+kved['KVED_v_normalized'] = kved['KVED_CODE'].astype(str).apply(extract_kved_v2)
 
-# 3) Підготувати таблицю: KVED_NORM + Risk
-df = kved[['KVED_NORM', 'Risk classification - Jan 2025']].copy()
-df.columns = ['KVED', 'Risk']
 
-# 4) Вибрати перший не-null Risk для кожного KVED
+kved_map_data = kved[['Risk classification - Jan 2025', 'KVED_v_normalized']]
+kved_map_data.columns = ['Risk', 'KVED']
+
 risk_map = (
-    df.groupby('KVED')['Risk']
-    .apply(lambda x: x.dropna().iloc[0] if x.dropna().size > 0 else None)
+    kved_map_data.groupby("KVED")["Risk"]
+    .apply(lambda x: x.dropna().iloc[0] if not x.dropna().empty else None)
+    .to_dict()
 )
 
-# 5) Додати фінальний Risk
-df['Risk'] = df['KVED'].map(risk_map)
 
-# 6) Видалити дублікати
-df = df.drop_duplicates()
+kved["Risk"] = kved["KVED_v_normalized"].map(risk_map)
 
-df
+kved.rename(columns={"KVED": "FIRM_KVED"}, inplace=True) 
+kved = kved.drop_duplicates()
+
+kved[['KVED_v_normalized', 'Risk']]
